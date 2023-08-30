@@ -16,7 +16,6 @@ public class Post {
     private String text;
     private int views;
 
-
     public Long getId() {
         return id;
     }
@@ -56,4 +55,5 @@ public class Post {
         this.anons = anons;
         this.text = text;
     }
+
 }

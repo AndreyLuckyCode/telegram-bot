@@ -31,7 +31,6 @@ public class FreeBlogController {
         return "blog-add";
     }
 
-
     @PostMapping("/blog/add")
     public String freeBlogPostAdd(@RequestParam String title,
                                   @RequestParam String anons,
@@ -50,11 +49,14 @@ public class FreeBlogController {
 
         Optional<Post> post = postRepository.findById(id);
         ArrayList<Post> res = new ArrayList<>();
-        post.ifPresent(res::add);
+        post.ifPresent(p -> {
+            p.setViews(p.getViews() + 1);
+            postRepository.save(p);
+            res.add(p);
+        });
         model.addAttribute("post", res);
         return "blog-details";
     }
-
 
     @GetMapping("/blog/{id}/edit")
     public String freeBlogEdit (@PathVariable(value = "id") long id, Model model){
@@ -68,7 +70,6 @@ public class FreeBlogController {
         model.addAttribute("post", res);
         return "blog-edit";
     }
-
 
     @PostMapping("/blog/{id}/edit")
     public String freeBlogPostUpdate(@PathVariable(value = "id") long id,
@@ -85,7 +86,6 @@ public class FreeBlogController {
         return "redirect:/blog";
     }
 
-
     @PostMapping("/blog/{id}/remove")
     public String freeBlogPostDelete(@PathVariable(value = "id") long id,
                                      Model model){
@@ -93,6 +93,9 @@ public class FreeBlogController {
         postRepository.delete(post);
         return "redirect:/blog";
     }
+
+
+
 
 
 

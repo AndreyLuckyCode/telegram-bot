@@ -11,6 +11,33 @@
 <div class="container mt-5">
     <h1 th:text="${title}"/>
 </div>
-<div th:insert="blocks/footer :: footer"></div>
+
+
+<div class="container mt-5">
+
+    <h1 class="text-center text-primary">Welcome to our blog page!</h1>
+
+    <p class="text-center">I wrote it as a project for practice.</p>
+
+    <div class="text-center">
+
+        <p><strong>The following technologies and frameworks were used:</strong></p>
+
+        <div class="diagonal-list">
+            <ul class="list-group">
+                <li class="list-group-item">Spring Boot</li>
+                <li class="list-group-item">Spring Security</li>
+                <li class="list-group-item">Hibernate</li>
+                <li class="list-group-item">MySQL</li>
+                <li class="list-group-item">REST</li>
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!--<div th:insert="blocks/footer :: footer"></div>-->
 </body>
 </html>
