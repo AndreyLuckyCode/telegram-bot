@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -35,7 +36,9 @@ public class FreeBlogController {
     public String freeBlogPostAdd(@RequestParam String title,
                                   @RequestParam String anons,
                                   @RequestParam String text,
-                                  Model model){
+                                  Model model, Principal principal){
+        if(principal==null){return "redirect:/login";}
+
         Post post = new Post(title,anons,text);
         postRepository.save(post);
         return "redirect:/blog";
@@ -76,7 +79,9 @@ public class FreeBlogController {
                                      @RequestParam String title,
                                      @RequestParam String anons,
                                      @RequestParam String text,
-                                     Model model){
+                                     Model model, Principal principal){
+        if(principal==null){return "redirect:/login";}
+
         Post post = postRepository.findById(id).orElseThrow();
         post.setTitle(title);
         post.setAnons(anons);
