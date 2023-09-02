@@ -14,12 +14,21 @@
         <h1 th:text="${el.title}"/>
         <p th:text="${el.text}"/>
         <p><b>Views:</b> <span th:text="${el.views}"/></p>
-        <a th:href="'/blog/' + ${el.id} + '/edit'" class="btn btn-warning">edit</a><br><br>
-        <form th:action="'/blog/' + ${el.id} + '/remove'" method="post">
-            <button class="btn btn-warning" type="submit">delete</button>
-        </form>
+
+
+
+        <div th:if="${isAdmin}">
+            <a th:href="'/blog/' + ${el.id} + '/edit'" class="btn btn-warning">edit</a><br><br>
+            <form th:action="'/blog/' + ${el.id} + '/remove'" method="post">
+                <button class="btn btn-warning" type="submit">delete</button>
+            </form>
+        </div>
+
+
+
     </div>
 </div>
+
 
 <!--<div th:insert="blocks/footer :: footer"></div>-->
 </body>
