@@ -25,12 +25,14 @@ public class SecurityConfig {
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .ignoringRequestMatchers(
                                 new AntPathRequestMatcher("/blog/add"),
-                                new AntPathRequestMatcher("/blog/{id}/edit")
+                                new AntPathRequestMatcher("/blog/{id}/edit"),
+                                new AntPathRequestMatcher("/blog/{id}/remove")
+
                         ))
                 .authorizeHttpRequests(authorize -> {
                     authorize
-                            .requestMatchers(HttpMethod.POST, "/blog/add", "/blog/{id}/edit")
-                            .permitAll()
+                            .requestMatchers(HttpMethod.POST, "/blog/add", "/blog/{id}/edit", "/blog/{id}/remove")
+                            .hasRole("ADMIN")
                             .anyRequest()
                             .authenticated();
                 })
@@ -41,11 +43,20 @@ public class SecurityConfig {
 
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
+        UserDetails admin = User.withDefaultPasswordEncoder()
                 .username("admin")
                 .password("admin")
                 .roles("ADMIN")
                 .build();
-        return new InMemoryUserDetailsManager(user);
+
+
+        UserDetails user = User.withDefaultPasswordEncoder()
+                .username("user")
+                .password("user")
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(admin,user);
     }
+
 }
