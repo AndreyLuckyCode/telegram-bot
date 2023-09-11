@@ -3,10 +3,12 @@ package com.andrey.lucky_job.service;
 import com.andrey.lucky_job.dao.VacancyRepository;
 import com.andrey.lucky_job.models.Vacancy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class VacancyServiceImpl implements VacancyService{
 
     @Autowired

@@ -5,7 +5,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.*;
 
 public class SearcherViewCard extends ListItem {
 
-    public SearcherViewCard(String text, String url) {
+    public SearcherViewCard(String text, String imageUrl) {
         addClassNames(Background.CONTRAST_5, Display.FLEX, FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
                 BorderRadius.LARGE);
 
@@ -16,7 +16,6 @@ public class SearcherViewCard extends ListItem {
 
         Image image = new Image();
         image.setWidth("100%");
-        image.setSrc(url);
         image.setAlt(text);
 
         div.add(image);
