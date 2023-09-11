@@ -14,8 +14,9 @@ public class CV {
     private String author;
     private String title;
     private String text;
-
     private int dateOfPublication;
+
+
     public Long getId() {
         return id;
     }

@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
+
+import java.time.LocalDate;
 
 @Entity
 public class Employer {
@@ -13,7 +16,12 @@ public class Employer {
     private Long id;
     private String name;
     private String surname;
-    private String nameOfCompany;
+    private LocalDate dateOfBirth;
+    private String phoneNumber;
+    @Email
+    private String email;
+    private String role;
+
 
     public Long getId() {
         return id;
@@ -33,19 +41,40 @@ public class Employer {
     public void setSurname(String surname) {
         this.surname = surname;
     }
-    public String getNameOfCompany() {
-        return nameOfCompany;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
-    public void setNameOfCompany(String nameOfCompany) {
-        this.nameOfCompany = nameOfCompany;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
     }
 
 
     public Employer() {
     }
-    public Employer(String name, String surname, String nameOfCompany) {
+    public Employer(String name, String surname, LocalDate dateOfBirth, String phoneNumber, String email, String role) {
         this.name = name;
         this.surname = surname;
-        this.nameOfCompany = nameOfCompany;
+        this.dateOfBirth = dateOfBirth;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.role = role;
     }
 }

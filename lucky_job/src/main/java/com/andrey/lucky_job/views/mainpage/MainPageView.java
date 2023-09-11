@@ -4,12 +4,11 @@ import com.andrey.lucky_job.views.MainLayout;
 import com.andrey.lucky_job.views.employer.EmployerView;
 import com.andrey.lucky_job.views.searcher.SearcherView;
 import com.andrey.lucky_job.views.signin.SigninView;
-import com.andrey.lucky_job.views.singup.SingupView;
+import com.andrey.lucky_job.views.signup.SignupView;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -66,7 +65,7 @@ public class MainPageView extends Composite<VerticalLayout> {
 
         buttonPrimary4.addClickListener(event -> {
             // Переход на страницу "Sign Up"
-            UI.getCurrent().navigate(SingupView.class);
+            UI.getCurrent().navigate(SignupView.class);
         });
 
         Button buttonPrimary5 = createButton("Sign In");

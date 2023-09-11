@@ -2,6 +2,7 @@ package com.andrey.lucky_job.views.employer;
 
 //import com.andrey.lucky_job.data.entity.SamplePerson;
 //import com.andrey.lucky_job.data.service.SamplePersonService;
+import com.andrey.lucky_job.models.Employer;
 import com.andrey.lucky_job.views.MainLayout;
 import com.andrey.lucky_job.views.addnewjob.AddNewJobView;
 import com.andrey.lucky_job.views.signin.SigninView;
@@ -29,9 +30,9 @@ public class EmployerView extends Composite<VerticalLayout> {
     public EmployerView() {
         Button buttonPrimary = new Button();
         H3 h3 = new H3();
-//        Grid basicGrid = new Grid(SamplePerson.class);
-//        getContent().setHeightFull();
-//        getContent().setWidthFull();
+        Grid basicGrid = new Grid(Employer.class);
+        getContent().setHeightFull();
+        getContent().setWidthFull();
         buttonPrimary.setText("One more vacancy?");
 
         buttonPrimary.addClickListener(event -> {

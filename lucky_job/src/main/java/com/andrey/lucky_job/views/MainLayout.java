@@ -6,7 +6,7 @@ import com.andrey.lucky_job.views.employer.EmployerView;
 import com.andrey.lucky_job.views.mainpage.MainPageView;
 import com.andrey.lucky_job.views.searcher.SearcherView;
 import com.andrey.lucky_job.views.signin.SigninView;
-import com.andrey.lucky_job.views.singup.SingupView;
+import com.andrey.lucky_job.views.signup.SignupView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.Footer;
@@ -54,7 +54,7 @@ public class MainLayout extends AppLayout {
         SideNav nav = new SideNav();
 
         nav.addItem(new SideNavItem("Main Page", MainPageView.class, LineAwesomeIcon.JAVA.create()));
-        nav.addItem(new SideNavItem("Sing up", SingupView.class, LineAwesomeIcon.USER.create()));
+        nav.addItem(new SideNavItem("Sing up", SignupView.class, LineAwesomeIcon.USER.create()));
         nav.addItem(new SideNavItem("Sign in", SigninView.class, LineAwesomeIcon.CHECK_CIRCLE_SOLID.create()));
         nav.addItem(new SideNavItem("Employer", EmployerView.class, LineAwesomeIcon.PENCIL_RULER_SOLID.create()));
         nav.addItem(new SideNavItem("Add New Job", AddNewJobView.class, LineAwesomeIcon.GG.create()));

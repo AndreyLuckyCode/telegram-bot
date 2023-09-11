@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
+
+import java.time.LocalDate;
 
 @Entity
 public class Searcher {
@@ -13,9 +16,12 @@ public class Searcher {
     private Long id;
     private String name;
     private String surname;
-    private int age;
-    private int jobExp;
-    private int jobTarget;
+    private LocalDate dateOfBirth;
+    private String phoneNumber;
+    @Email
+    private String email;
+    private String role;
+
 
     public Long getId() {
         return id;
@@ -35,34 +41,40 @@ public class Searcher {
     public void setSurname(String surname) {
         this.surname = surname;
     }
-    public int getAge() {
-        return age;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
-    public void setAge(int age) {
-        this.age = age;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
-    public int getJobExp() {
-        return jobExp;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
-    public void setJobExp(int jobExp) {
-        this.jobExp = jobExp;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
-    public int getJobTarget() {
-        return jobTarget;
+    public String getEmail() {
+        return email;
     }
-    public void setJobTarget(int jobTarget) {
-        this.jobTarget = jobTarget;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
     }
 
 
     public Searcher() {
     }
-
-    public Searcher(String name, String surname, int age, int jobExp, int jobTarget) {
+    public Searcher(String name, String surname, LocalDate dateOfBirth, String phoneNumber, String email, String role) {
         this.name = name;
         this.surname = surname;
-        this.age = age;
-        this.jobExp = jobExp;
-        this.jobTarget = jobTarget;
+        this.dateOfBirth = dateOfBirth;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.role = role;
     }
 }

@@ -18,29 +18,37 @@ import com.vaadin.flow.router.Route;
 public class AddNewJobView extends Composite<VerticalLayout> {
 
     public AddNewJobView() {
-        Button buttonPrimary = new Button();
+        // Создаем компоненты интерфейса
+        Button addButton = createButton("Add");
+        TextArea companyTextArea = createTextArea("Company");
+        TextArea requirementsTextArea = createTextArea("Requirements");
+        TextArea responsibilitiesTextArea = createTextArea("Responsibilities");
+        TextArea salaryTextArea = createTextArea("Salary");
+
+        // Устанавливаем ширину и выравнивание элементов
+        companyTextArea.setWidthFull();
+        requirementsTextArea.setWidthFull();
+        responsibilitiesTextArea.setWidthFull();
+        salaryTextArea.setWidthFull();
+
+        // Добавляем компоненты на вертикальный макет
+        VerticalLayout content = getContent();
+        content.setHeightFull();
+        content.setWidthFull();
+        content.add(addButton, companyTextArea, requirementsTextArea, responsibilitiesTextArea, salaryTextArea);
+        content.setAlignSelf(FlexComponent.Alignment.START, addButton);
+        content.setAlignSelf(FlexComponent.Alignment.START, companyTextArea);
+    }
+
+    private Button createButton(String text) {
+        Button button = new Button(text);
+        button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        return button;
+    }
+
+    private TextArea createTextArea(String label) {
         TextArea textArea = new TextArea();
-        TextArea textArea2 = new TextArea();
-        TextArea textArea3 = new TextArea();
-        TextArea textArea4 = new TextArea();
-        getContent().setHeightFull();
-        getContent().setWidthFull();
-        buttonPrimary.setText("Add");
-        getContent().setAlignSelf(FlexComponent.Alignment.START, buttonPrimary);
-        buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        textArea.setLabel("Company");
-        textArea.setWidthFull();
-        getContent().setAlignSelf(FlexComponent.Alignment.START, textArea);
-        textArea2.setLabel("Requirements");
-        textArea2.setWidthFull();
-        textArea3.setLabel("Responsibilities");
-        textArea3.setWidthFull();
-        textArea4.setLabel("Salary");
-        textArea4.setWidthFull();
-        getContent().add(buttonPrimary);
-        getContent().add(textArea);
-        getContent().add(textArea2);
-        getContent().add(textArea3);
-        getContent().add(textArea4);
+        textArea.setLabel(label);
+        return textArea;
     }
 }
