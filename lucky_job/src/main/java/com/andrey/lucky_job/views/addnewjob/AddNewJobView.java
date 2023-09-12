@@ -7,95 +7,88 @@ import com.andrey.lucky_job.views.searcher.SearcherView;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.spring.annotation.VaadinSessionScope;
+import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 @PageTitle("Add New Job")
 @Route(value = "post-new-job", layout = MainLayout.class)
-@Uses(Icon.class)
+@Component
+@UIScope
+@Scope("prototype")
 public class AddNewJobView extends Composite<VerticalLayout> {
 
+    private final VacancyService vacancyService;
+    private final SearcherView searcherView;
+
     @Autowired
-    public AddNewJobView(SearcherView searcherView, VacancyService vacancyService) {
+    public AddNewJobView(VacancyService vacancyService, SearcherView searcherView) {
+        this.vacancyService = vacancyService;
+        this.searcherView = searcherView;
 
-        // Создаем компоненты интерфейса
-        Button addButton = createButton("Add");
-        TextArea companyTextArea = createTextArea("Company");
-        TextArea requirementsTextArea = createTextArea("Requirements");
-        TextArea responsibilitiesTextArea = createTextArea("Responsibilities");
-        TextArea salaryTextArea = createTextArea("Salary");
+        // Create interface components
+        Button addButton = new Button("Add", new Icon(VaadinIcon.PLUS));
+        addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
+        // Define input fields
+        TextArea companyTextArea = new TextArea("Company");
+        TextArea requirementsTextArea = new TextArea("Requirements");
+        TextArea responsibilitiesTextArea = new TextArea("Responsibilities");
+        TextField salaryTextField = new TextField("Salary");
+
+
+        // Handle the button click event
         addButton.addClickListener(event -> {
-            // Получите значения из текстовых полей
             String company = companyTextArea.getValue();
             String requirements = requirementsTextArea.getValue();
             String responsibilities = responsibilitiesTextArea.getValue();
-            String salaryText = salaryTextArea.getValue(); // Получите текст из поля salary
+            String salaryText = salaryTextField.getValue();
 
             if (!salaryText.isEmpty()) {
                 try {
                     int salary = Integer.parseInt(salaryText);
-
-                    // Создайте объект Vacancy
                     Vacancy vacancy = new Vacancy(company, requirements, responsibilities, salary);
-
-                    // Сохраните объект Vacancy в базе данных с помощью VacancyService
                     vacancyService.saveVacancy(vacancy);
 
-                    // Добавьте данные для создания карточки в SearcherView
-                    searcherView.addCardData(company, requirements, responsibilities, salary);
+                    // Trigger the AddCardEvent to add a new card in the SearcherView
+                    SearcherView.AddCardEvent addCardEvent = new SearcherView.AddCardEvent(searcherView, company, requirements, responsibilities, salary);
+                    searcherView.getElement().executeJs("this.$server.addCardEvent($0)", addCardEvent);
 
-                    // Очистите текстовые поля после добавления
+                    // Clear input fields after adding
                     companyTextArea.clear();
                     requirementsTextArea.clear();
                     responsibilitiesTextArea.clear();
-                    salaryTextArea.clear();
+                    salaryTextField.clear();
 
                 } catch (NumberFormatException e) {
-                    // Обработка ошибки, если введенное значение не является числом
-                    // Выведите сообщение об ошибке или выполните другие действия по вашему усмотрению.
-                    Notification.show("Ошибка: Значение поля 'salary' должно быть числом.");
+                    Notification.show("Error: Salary must be a number.");
                 }
             } else {
-                // Обработка ошибки, если текстовое поле salary пустое
-                // Выведите сообщение об ошибке или выполните другие действия по вашему усмотрению.
-                Notification.show("Ошибка: Поле 'salary' не может быть пустым.");
+                Notification.show("Error: Salary field cannot be empty.");
             }
         });
 
-// Устанавливаем ширину и выравнивание элементов
+        // Set component widths
         companyTextArea.setWidthFull();
         requirementsTextArea.setWidthFull();
         responsibilitiesTextArea.setWidthFull();
-        salaryTextArea.setWidthFull();
+        salaryTextField.setWidthFull();
 
-// Добавляем компоненты на вертикальный макет
+        // Add components to the layout
         VerticalLayout content = getContent();
         content.setHeightFull();
         content.setWidthFull();
-        content.add(addButton, companyTextArea, requirementsTextArea, responsibilitiesTextArea, salaryTextArea);
+        content.add(addButton, companyTextArea, requirementsTextArea, responsibilitiesTextArea, salaryTextField);
         content.setAlignSelf(FlexComponent.Alignment.START, addButton);
-        content.setAlignSelf(FlexComponent.Alignment.START, companyTextArea);
-    }
-
-
-    private Button createButton(String text) {
-        Button button = new Button(text);
-        button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        return button;
-    }
-
-    private TextArea createTextArea(String label) {
-        TextArea textArea = new TextArea();
-        textArea.setLabel(label);
-        return textArea;
     }
 }
