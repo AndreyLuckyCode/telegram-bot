@@ -37,13 +37,14 @@ public class SearcherView extends Composite<VerticalLayout> {
     private void loadAndDisplayCards() {
         List<Vacancy> vacancies = vacancyService.getAllVacancies();
         for (Vacancy vacancy : vacancies) {
-            addCardData(vacancy.getCompany(), "URL_КАРТИНКИ"); // Замените "URL_КАРТИНКИ" на реальный URL из Vacancy, если у вас есть такое поле.
+            addCardData(vacancy.getCompany(), vacancy.getRequirements()
+                    , vacancy.getResponsibilities(), vacancy.getSalary()); // Замените "URL_КАРТИНКИ" на реальный URL из Vacancy, если у вас есть такое поле.
         }
     }
 
     // Метод для добавления данных для создания карточки
-    public void addCardData(String company, String imageUrl) {
-        SearcherViewCard card = new SearcherViewCard(company, imageUrl);
-        content.add(card);
+    public void addCardData(String company, String requirements, String responsibilities, int salary) {
+        SearcherViewCard card = new SearcherViewCard(company, requirements, responsibilities, salary);
+        content.addComponentAtIndex(0, card); // Добавить карточку в начало VerticalLayout
     }
 }

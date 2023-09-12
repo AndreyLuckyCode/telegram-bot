@@ -5,36 +5,36 @@ import com.vaadin.flow.theme.lumo.LumoUtility.*;
 
 public class SearcherViewCard extends ListItem {
 
-    public SearcherViewCard(String text, String imageUrl) {
+    public SearcherViewCard(String company, String requirements, String responsibilities, int salary) {
         addClassNames(Background.CONTRAST_5, Display.FLEX, FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
                 BorderRadius.LARGE);
 
         Div div = new Div();
         div.addClassNames(Background.CONTRAST, Display.FLEX, AlignItems.CENTER, JustifyContent.CENTER,
                 Margin.Bottom.MEDIUM, Overflow.HIDDEN, BorderRadius.MEDIUM, Width.FULL);
-        div.setHeight("160px");
+        div.setHeight("400px");
 
-        Image image = new Image();
+        Image image = new Image("https://img.reg.ru/news/823dd699786133.Y3JvcCwxMTUwLDkwMCwyMjUsMA.gif", "Company Logo");
         image.setWidth("100%");
-        image.setAlt(text);
+
 
         div.add(image);
 
         Span header = new Span();
         header.addClassNames(FontSize.XLARGE, FontWeight.SEMIBOLD);
-        header.setText("Title");
+        header.setText(company);
 
         Span subtitle = new Span();
         subtitle.addClassNames(FontSize.SMALL, TextColor.SECONDARY);
-        subtitle.setText("Card subtitle");
+        subtitle.setText(requirements);
 
         Paragraph description = new Paragraph(
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.");
+                responsibilities);
         description.addClassName(Margin.Vertical.MEDIUM);
 
         Span badge = new Span();
         badge.getElement().setAttribute("theme", "badge");
-        badge.setText("Label");
+        badge.setText(String.valueOf(salary));
 
         add(div, header, subtitle, description, badge);
 

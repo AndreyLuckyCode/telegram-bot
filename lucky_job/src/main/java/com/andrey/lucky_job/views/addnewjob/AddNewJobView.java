@@ -51,7 +51,7 @@ public class AddNewJobView extends Composite<VerticalLayout> {
                     vacancyService.saveVacancy(vacancy);
 
                     // Добавьте данные для создания карточки в SearcherView
-                    searcherView.addCardData(company, "URL_КАРТИНКИ");
+                    searcherView.addCardData(company, requirements, responsibilities, salary);
 
                     // Очистите текстовые поля после добавления
                     companyTextArea.clear();
