@@ -30,65 +30,90 @@ public class AddNewJobView extends Composite<VerticalLayout> {
 
     private final VacancyService vacancyService;
     private final SearcherView searcherView;
+    private final Button addButton;
+    private final TextArea companyTextArea;
+    private final TextArea requirementsTextArea;
+    private final TextArea responsibilitiesTextArea;
+    private final TextField salaryTextField;
 
     @Autowired
     public AddNewJobView(VacancyService vacancyService, SearcherView searcherView) {
         this.vacancyService = vacancyService;
         this.searcherView = searcherView;
 
-        // Create interface components
-        Button addButton = new Button("Add", new Icon(VaadinIcon.PLUS));
-        addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        // Инициализация интерфейсных компонентов
+        addButton = createAddButton();
+        companyTextArea = createTextArea("Company");
+        requirementsTextArea = createTextArea("Requirements");
+        responsibilitiesTextArea = createTextArea("Responsibilities");
+        salaryTextField = createTextField("Salary");
 
-        // Define input fields
-        TextArea companyTextArea = new TextArea("Company");
-        TextArea requirementsTextArea = new TextArea("Requirements");
-        TextArea responsibilitiesTextArea = new TextArea("Responsibilities");
-        TextField salaryTextField = new TextField("Salary");
+        // Обработка нажатия кнопки "Add"
+        addButton.addClickListener(event -> handleAddButtonClick());
 
+        // Установка ширины компонентов
+        setComponentWidths();
 
-        // Handle the button click event
-        addButton.addClickListener(event -> {
-            String company = companyTextArea.getValue();
-            String requirements = requirementsTextArea.getValue();
-            String responsibilities = responsibilitiesTextArea.getValue();
-            String salaryText = salaryTextField.getValue();
-
-            if (!salaryText.isEmpty()) {
-                try {
-                    int salary = Integer.parseInt(salaryText);
-                    Vacancy vacancy = new Vacancy(company, requirements, responsibilities, salary);
-                    vacancyService.saveVacancy(vacancy);
-
-                    // Trigger the AddCardEvent to add a new card in the SearcherView
-                    SearcherView.AddCardEvent addCardEvent = new SearcherView.AddCardEvent(searcherView, company, requirements, responsibilities, salary);
-                    searcherView.getElement().executeJs("this.$server.addCardEvent($0)", addCardEvent);
-
-                    // Clear input fields after adding
-                    companyTextArea.clear();
-                    requirementsTextArea.clear();
-                    responsibilitiesTextArea.clear();
-                    salaryTextField.clear();
-
-                } catch (NumberFormatException e) {
-                    Notification.show("Error: Salary must be a number.");
-                }
-            } else {
-                Notification.show("Error: Salary field cannot be empty.");
-            }
-        });
-
-        // Set component widths
-        companyTextArea.setWidthFull();
-        requirementsTextArea.setWidthFull();
-        responsibilitiesTextArea.setWidthFull();
-        salaryTextField.setWidthFull();
-
-        // Add components to the layout
+        // Добавление компонентов в макет
         VerticalLayout content = getContent();
         content.setHeightFull();
         content.setWidthFull();
         content.add(addButton, companyTextArea, requirementsTextArea, responsibilitiesTextArea, salaryTextField);
         content.setAlignSelf(FlexComponent.Alignment.START, addButton);
+    }
+
+    private Button createAddButton() {
+        Button addButton = new Button("Add", new Icon(VaadinIcon.PLUS));
+        addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        return addButton;
+    }
+
+    private TextArea createTextArea(String label) {
+        TextArea textArea = new TextArea(label);
+        textArea.setWidthFull();
+        return textArea;
+    }
+
+    private TextField createTextField(String label) {
+        TextField textField = new TextField(label);
+        textField.setWidthFull();
+        return textField;
+    }
+
+    private void setComponentWidths() {
+        companyTextArea.setWidthFull();
+        requirementsTextArea.setWidthFull();
+        responsibilitiesTextArea.setWidthFull();
+        salaryTextField.setWidthFull();
+    }
+
+    private void handleAddButtonClick() {
+        String company = companyTextArea.getValue();
+        String requirements = requirementsTextArea.getValue();
+        String responsibilities = responsibilitiesTextArea.getValue();
+        String salaryText = salaryTextField.getValue();
+
+        if (!salaryText.isEmpty()) {
+            try {
+                int salary = Integer.parseInt(salaryText);
+                Vacancy vacancy = new Vacancy(company, requirements, responsibilities, salary);
+                vacancyService.saveVacancy(vacancy);
+
+                // Триггер для AddCardEvent в SearcherView
+                SearcherView.AddCardEvent addCardEvent = new SearcherView.AddCardEvent(searcherView, company, requirements, responsibilities, salary);
+                searcherView.getElement().executeJs("this.$server.addCardEvent($0)", addCardEvent);
+
+                // Очистка полей после нажатия кнопки
+                companyTextArea.clear();
+                requirementsTextArea.clear();
+                responsibilitiesTextArea.clear();
+                salaryTextField.clear();
+
+            } catch (NumberFormatException e) {
+                Notification.show("Error: Salary must be a number.");
+            }
+        } else {
+            Notification.show("Error: Salary field cannot be empty.");
+        }
     }
 }

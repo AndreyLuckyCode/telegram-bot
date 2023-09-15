@@ -24,9 +24,11 @@ import java.util.List;
 @Scope("prototype")
 public class SearcherView extends Composite<VerticalLayout> {
 
-    private VerticalLayout content;
+    private final VerticalLayout content;
     private final VacancyService vacancyService;
 
+
+    //Даем доступ к сервису
     @Autowired
     public SearcherView(VacancyService vacancyService) {
         this.vacancyService = vacancyService;
@@ -34,26 +36,37 @@ public class SearcherView extends Composite<VerticalLayout> {
         content = getContent();
         content.setHeightFull();
         content.setWidthFull();
-        // Загрузите и отобразите все карточки из базы данных при инициализации представления
+
         loadAndDisplayCards();
     }
 
-    // Метод для загрузки и отображения карточек из базы данных
+
+    //Подгружаем существующие карточки из БД и отображаем их
     private void loadAndDisplayCards() {
         List<Vacancy> vacancies = vacancyService.getAllVacancies();
+
         for (Vacancy vacancy : vacancies) {
-            addCardData(vacancy.getCompany(), vacancy.getRequirements(),
-                    vacancy.getResponsibilities(), vacancy.getSalary(), vacancy.getId());
+            addCardData(vacancy);
         }
     }
 
-    // Метод для добавления данных для создания карточки
-    public void addCardData(String company, String requirements, String responsibilities, int salary, Long vacancyId) {
-        Vacancy vacancy = vacancyService.getVacancy(vacancyId);
-        SearcherViewCard card = new SearcherViewCard(company, requirements, responsibilities, salary, vacancy.getId(), vacancyService);
-        content.addComponentAtIndex(0, card); // Добавить карточку в начало VerticalLayout
+
+    //Заполняем очередную карточку инфой из полей
+    public void addCardData(Vacancy vacancy) {
+        SearcherViewCard card = new SearcherViewCard(
+                vacancy.getCompany(),
+                vacancy.getRequirements(),
+                vacancy.getResponsibilities(),
+                vacancy.getSalary(),
+                vacancy.getId(),
+                vacancyService
+        );
+        content.addComponentAtIndex(0, card); // Добавление новой карточки сверху
     }
 
+
+    //Этот вложенный ивент класс нужен для передачи данных между компонентами
+    //Триггерится при регистрации новых значений полей
     public static class AddCardEvent extends ComponentEvent<SearcherView> {
         private final String company;
         private final String requirements;
@@ -71,20 +84,19 @@ public class SearcherView extends Composite<VerticalLayout> {
         public String getCompany() {
             return company;
         }
-
         public String getRequirements() {
             return requirements;
         }
-
         public String getResponsibilities() {
             return responsibilities;
         }
-
         public int getSalary() {
             return salary;
         }
     }
 
+
+    //Слушатель, который реалирует на ивент
     public Registration addAddCardListener(ComponentEventListener<AddCardEvent> listener) {
         return addListener(AddCardEvent.class, listener);
     }
