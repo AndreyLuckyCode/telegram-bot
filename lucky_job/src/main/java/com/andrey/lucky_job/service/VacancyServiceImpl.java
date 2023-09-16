@@ -34,4 +34,20 @@ public class VacancyServiceImpl implements VacancyService{
     public void deleteVacancy(Long id) {
         vacancyRepository.deleteById(id);
     }
+    @Override
+    public void updateVacancy(Long id, Vacancy updatedVacancy) {
+        Optional<Vacancy> optional = vacancyRepository.findById(id);
+        if (optional.isPresent()) {
+            Vacancy existingVacancy = optional.get();
+
+            // Обновляем поля в существующей вакансии с новыми данными
+            existingVacancy.setCompany(updatedVacancy.getCompany());
+            existingVacancy.setRequirements(updatedVacancy.getRequirements());
+            existingVacancy.setResponsibilities(updatedVacancy.getResponsibilities());
+            existingVacancy.setSalary(updatedVacancy.getSalary());
+
+            // Сохраняем обновленную вакансию в базе данных
+            vacancyRepository.save(existingVacancy);
+        }
+    }
 }

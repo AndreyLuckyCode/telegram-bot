@@ -10,4 +10,5 @@ public interface VacancyService {
     public void saveVacancy(Vacancy vacancy);
     public Vacancy getVacancy(Long id);
     public void deleteVacancy(Long id);
+    void updateVacancy(Long id, Vacancy updatedVacancy);
 }

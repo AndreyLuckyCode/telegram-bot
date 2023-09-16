@@ -6,6 +6,7 @@ import com.andrey.lucky_job.views.MainLayout;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -67,6 +68,7 @@ public class SearcherView extends Composite<VerticalLayout> {
 
     //Этот вложенный ивент класс нужен для передачи данных между компонентами
     //Триггерится при регистрации новых значений полей
+    //Осуществляет переход при создании карточки
     public static class AddCardEvent extends ComponentEvent<SearcherView> {
         private final String company;
         private final String requirements;
@@ -79,6 +81,7 @@ public class SearcherView extends Composite<VerticalLayout> {
             this.requirements = requirements;
             this.responsibilities = responsibilities;
             this.salary = salary;
+            UI.getCurrent().navigate("searcher");
         }
 
         public String getCompany() {
@@ -96,7 +99,7 @@ public class SearcherView extends Composite<VerticalLayout> {
     }
 
 
-    //Слушатель, который реалирует на ивент
+    //Слушатель, который реализует на ивент
     public Registration addAddCardListener(ComponentEventListener<AddCardEvent> listener) {
         return addListener(AddCardEvent.class, listener);
     }
