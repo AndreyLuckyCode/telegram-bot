@@ -46,7 +46,7 @@ public class AddNewJobView extends Composite<VerticalLayout> {
         companyTextArea = createTextArea("Company");
         requirementsTextArea = createTextArea("Requirements");
         responsibilitiesTextArea = createTextArea("Responsibilities");
-        salaryTextField = createTextField("Salary");
+        salaryTextField = createTextField("Salary $");
 
         // Обработка нажатия кнопки "Add"
         addButton.addClickListener(event -> handleAddButtonClick());

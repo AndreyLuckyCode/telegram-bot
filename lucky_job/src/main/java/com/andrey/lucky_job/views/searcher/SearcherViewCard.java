@@ -43,7 +43,7 @@ public class SearcherViewCard extends ListItem {
 
         badge = new Span();
         badge.getElement().setAttribute("theme", "badge");
-        badge.setText(String.valueOf(salary));
+        badge.setText(String.format("%d $", salary));
 
         Button updateButton = new Button("Update");
         updateButton.addClickListener(event -> {
@@ -117,6 +117,6 @@ public class SearcherViewCard extends ListItem {
         header.setText(company);
         subtitle.setText(requirements);
         description.setText(responsibilities);
-        badge.setText(String.valueOf(salary));
+        badge.setText(String.valueOf(salary) + " $");
     }
 }
