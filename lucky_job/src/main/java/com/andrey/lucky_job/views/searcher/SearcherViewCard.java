@@ -22,7 +22,7 @@ public class SearcherViewCard extends ListItem {
         Div div = new Div();
         div.addClassNames(Background.CONTRAST, Display.FLEX, AlignItems.CENTER, JustifyContent.CENTER,
                 Margin.Bottom.MEDIUM, Overflow.HIDDEN, BorderRadius.MEDIUM, Width.FULL);
-        div.setHeight("400px");
+        div.setHeight("185px");
 
         Image image = new Image("https://img.reg.ru/news/823dd699786133.Y3JvcCwxMTUwLDkwMCwyMjUsMA.gif", "Company Logo");
         image.setWidth("100%");

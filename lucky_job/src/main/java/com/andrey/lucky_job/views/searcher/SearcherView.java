@@ -7,6 +7,8 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -27,7 +29,7 @@ public class SearcherView extends Composite<VerticalLayout> {
 
     private final VerticalLayout content;
     private final VacancyService vacancyService;
-
+    private final FlexLayout cardLayout;
 
     //Даем доступ к сервису
     @Autowired
@@ -37,6 +39,11 @@ public class SearcherView extends Composite<VerticalLayout> {
         content = getContent();
         content.setHeightFull();
         content.setWidthFull();
+
+        cardLayout = new FlexLayout();
+        cardLayout.setWidth("100%"); // Устанавливаем ширину на 100% для растяжения по ширине
+        cardLayout.setFlexWrap(FlexLayout.FlexWrap.WRAP); // Разрешаем перенос карточек на следующую строку
+        content.add(cardLayout);
 
         loadAndDisplayCards();
     }
@@ -62,7 +69,9 @@ public class SearcherView extends Composite<VerticalLayout> {
                 vacancy.getId(),
                 vacancyService
         );
-        content.addComponentAtIndex(0, card); // Добавление новой карточки сверху
+        card.setWidth("29%"); // Устанавливаем ширину карточки
+        cardLayout.getStyle().set("gap", "20px"); // Устанавливаем отступ между карточками
+        cardLayout.addComponentAtIndex(0, card);
     }
 
 
