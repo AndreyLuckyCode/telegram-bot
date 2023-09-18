@@ -60,6 +60,19 @@ public class SearcherViewCard extends ListItem {
         buttonLayout.setSpacing(true);
 
         add(div, header, subtitle, description, badge, buttonLayout);
+
+        // Стили для изменения размера при наведении
+        getElement().getStyle()
+                .set("transition", "transform 0.2s")
+                .set("cursor", "pointer");
+
+        getElement().addEventListener("mouseover", e -> {
+            getElement().getStyle().set("transform", "scale(1.02)");
+        });
+
+        getElement().addEventListener("mouseout", e -> {
+            getElement().getStyle().set("transform", "scale(1)");
+        });
     }
 
 

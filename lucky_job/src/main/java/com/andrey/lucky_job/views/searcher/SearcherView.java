@@ -46,6 +46,13 @@ public class SearcherView extends Composite<VerticalLayout> {
         content.add(cardLayout);
 
         loadAndDisplayCards();
+
+        // Поддержка изменения цвета карточек при наведении
+        cardLayout.getChildren().forEach(card -> {
+            card.getElement().getStyle().set("cursor", "pointer");
+            card.getElement().addEventListener("mouseover", e -> card.getStyle().set("filter", "brightness(120%)"));
+            card.getElement().addEventListener("mouseout", e -> card.getStyle().remove("filter"));
+        });
     }
 
 
