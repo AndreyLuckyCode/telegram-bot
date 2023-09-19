@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.Date;
+
 @Entity
 public class CV {
 
@@ -14,7 +16,7 @@ public class CV {
     private String author;
     private String title;
     private String text;
-    private int dateOfPublication;
+    private Date dateOfPublication;
 
 
     public Long getId() {
@@ -41,17 +43,17 @@ public class CV {
     public void setText(String text) {
         this.text = text;
     }
-    public int getDateOfPublication() {
+    public Date getDateOfPublication() {
         return dateOfPublication;
     }
-    public void setDateOfPublication(int dateOfPublication) {
+    public void setDateOfPublication(Date dateOfPublication) {
         this.dateOfPublication = dateOfPublication;
     }
 
 
     public CV() {
     }
-    public CV(String author, String title, String text, int dateOfPublication) {
+    public CV(String author, String title, String text, Date dateOfPublication) {
         this.author = author;
         this.title = title;
         this.text = text;
