@@ -79,6 +79,10 @@ public class SearcherView extends Composite<VerticalLayout> {
         card.setWidth("29%"); // Устанавливаем ширину карточки
         cardLayout.getStyle().set("gap", "20px"); // Устанавливаем отступ между карточками
         cardLayout.addComponentAtIndex(0, card);
+
+        card.addClickListener(event -> {
+            UI.getCurrent().navigate(CVChatView.class, vacancy.getId());
+        });
     }
 
 
@@ -115,7 +119,7 @@ public class SearcherView extends Composite<VerticalLayout> {
     }
 
 
-    //Слушатель, который реализует на ивент
+    //Слушатель, который реализует ивент
     public Registration addAddCardListener(ComponentEventListener<AddCardEvent> listener) {
         return addListener(AddCardEvent.class, listener);
     }

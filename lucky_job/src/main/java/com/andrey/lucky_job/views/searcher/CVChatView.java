@@ -1,34 +1,59 @@
 package com.andrey.lucky_job.views.searcher;
 
 import com.andrey.lucky_job.models.CV;
+import com.andrey.lucky_job.models.Vacancy;
 import com.andrey.lucky_job.service.CVService;
+import com.andrey.lucky_job.service.VacancyService;
+import com.andrey.lucky_job.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.router.OptionalParameter;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.spring.annotation.VaadinSessionScope;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Route("cv-chat")
-public class CVChatView extends VerticalLayout {
+@Route(value = "cv-chat", layout = MainLayout.class)
+@Component
+@VaadinSessionScope
+@Scope("prototype")
+public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> {
 
     private final CVService cvService;
+    private final VacancyService vacancyService;
+    private Vacancy currentVacancy;
     private final VerticalLayout contentLayout;
     private final VerticalLayout messageListLayout;
     private final FormLayout cvForm;
-    private final FooterLayout bottomLayout;
+    private FooterLayout bottomLayout;
     private final Button postButton;
     private TextField authorField;
     private TextField titleField;
     private TextField textField;
 
+    private SearcherViewCard vacancyCard;
+    private Div cardContainer;
 
-    public CVChatView(CVService cvService) {
+
+    public CVChatView(@Autowired CVService cvService, @Autowired VacancyService vacancyService) {
         this.cvService = cvService;
+        this.vacancyService = vacancyService;
 
         setClassName("cv-chat-view");
         setAlignItems(Alignment.CENTER);
@@ -36,7 +61,6 @@ public class CVChatView extends VerticalLayout {
 
         contentLayout = new VerticalLayout();
 
-        // Добавляем стили для высоты и прокрутки к messageListLayout
         messageListLayout = new VerticalLayout();
         messageListLayout.getElement().getStyle().set("max-height", "calc(100vh - 400px)");
         messageListLayout.getElement().getStyle().set("overflow-y", "auto");
@@ -44,7 +68,7 @@ public class CVChatView extends VerticalLayout {
         cvForm = createCVForm();
         postButton = new Button("Post");
 
-        cvForm.setVisible(false); // Изначально форма скрыта
+        cvForm.setVisible(false);
 
         postButton.addClickListener(event -> {
             postButton.setVisible(false);
@@ -60,6 +84,42 @@ public class CVChatView extends VerticalLayout {
         contentLayout.add(messageListLayout, bottomLayout);
 
         add(contentLayout);
+    }
+
+    @Override
+    public void setParameter(BeforeEvent event, @OptionalParameter Long vacancyId) {
+        if (vacancyId != null) {
+            currentVacancy = vacancyService.getVacancy(vacancyId);
+            vacancyCard = createCard(currentVacancy);
+            cardContainer = new Div(vacancyCard);
+            displayCard(currentVacancy);
+        }
+    }
+
+    private SearcherViewCard createCard(Vacancy vacancy) {
+        return new SearcherViewCard(
+                vacancy.getCompany(),
+                vacancy.getRequirements(),
+                vacancy.getResponsibilities(),
+                vacancy.getSalary(),
+                vacancy.getId(),
+                vacancyService
+        );
+    }
+
+    private void displayCard(Vacancy vacancy) {
+        SearcherViewCard card = createCard(vacancy);
+
+        card.setWidth("15%");
+        card.setEnabled(false);
+
+        HorizontalLayout mainLayout = new HorizontalLayout();
+        mainLayout.setWidthFull();
+        mainLayout.add(messageListLayout, cardContainer);
+        mainLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
+
+        contentLayout.removeAll();
+        contentLayout.add(mainLayout, bottomLayout);
     }
 
     private FormLayout createCVForm() {

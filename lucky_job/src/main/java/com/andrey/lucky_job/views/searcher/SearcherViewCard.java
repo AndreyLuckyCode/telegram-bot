@@ -46,15 +46,15 @@ public class SearcherViewCard extends ListItem {
         badge.setText(String.format("%d $", salary));
 
         Button updateButton = new Button("Update");
-        updateButton.addClickListener(event -> {
+        updateButton.getElement().addEventListener("click", ignore -> {
             createEditDialog(company, requirements, responsibilities, salary, vacancyId, vacancyService);
-        });
+        }).addEventData("event.stopPropagation()");
 
         Button deleteButton = new Button("Delete");
-        deleteButton.addClickListener(event -> {
+        deleteButton.getElement().addEventListener("click", ignore -> {
             vacancyService.deleteVacancy(vacancyId);
             this.setVisible(false);
-        });
+        }).addEventData("event.stopPropagation()");
 
         HorizontalLayout buttonLayout = new HorizontalLayout(updateButton, deleteButton);
         buttonLayout.setSpacing(true);
