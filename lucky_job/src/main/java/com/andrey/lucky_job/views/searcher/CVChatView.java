@@ -20,11 +20,7 @@ import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
 import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.OptionalParameter;
-import com.vaadin.flow.router.Route;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -64,6 +60,7 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         messageListLayout = new VerticalLayout();
         messageListLayout.getElement().getStyle().set("max-height", "calc(100vh - 400px)");
         messageListLayout.getElement().getStyle().set("overflow-y", "auto");
+        messageListLayout.setWidthFull();
 
         cvForm = createCVForm();
         postButton = new Button("Post");
@@ -110,12 +107,18 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
     private void displayCard(Vacancy vacancy) {
         SearcherViewCard card = createCard(vacancy);
 
-        card.setWidth("15%");
+//        setWidth("20%");
+//        setHeight("60%");
+//        getElement().getStyle().set("width", "20%");
+        getElement().getStyle().set("height", "100%");
         card.setEnabled(false);
+
+        cardContainer.setMaxWidth("22%");
+        messageListLayout.setMaxWidth("75%");
 
         HorizontalLayout mainLayout = new HorizontalLayout();
         mainLayout.setWidthFull();
-        mainLayout.add(messageListLayout, cardContainer);
+        mainLayout.add(cardContainer, messageListLayout);
         mainLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
 
         contentLayout.removeAll();
@@ -126,7 +129,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         FormLayout form = new FormLayout();
         form.setWidth("300px");
 
-        // Добавьте эти строки для выравнивания формы по центру
         form.getElement().getStyle().set("position", "absolute");
         form.getElement().getStyle().set("left", "50%");
         form.getElement().getStyle().set("transform", "translateX(-50%)");
