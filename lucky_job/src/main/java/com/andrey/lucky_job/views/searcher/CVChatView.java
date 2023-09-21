@@ -100,7 +100,8 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
                 vacancy.getResponsibilities(),
                 vacancy.getSalary(),
                 vacancy.getId(),
-                vacancyService
+                vacancyService,
+                false
         );
     }
 

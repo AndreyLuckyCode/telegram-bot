@@ -10,14 +10,17 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 
 public class SearcherViewCard extends ListItem {
+    private boolean displayButtons;
     private Span header;
     private Span subtitle;
     private Paragraph description;
     private Span badge;
 
-    public SearcherViewCard(String company, String requirements, String responsibilities, int salary, Long vacancyId, VacancyService vacancyService) {
+    public SearcherViewCard(String company, String requirements, String responsibilities, int salary, Long vacancyId, VacancyService vacancyService, boolean displayButtons) {
         addClassNames(Background.CONTRAST_5, Display.FLEX, FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
                 BorderRadius.LARGE);
+        this.displayButtons = displayButtons;
+
 
         Div div = new Div();
         div.addClassNames(Background.CONTRAST, Display.FLEX, AlignItems.CENTER, JustifyContent.CENTER,
@@ -29,7 +32,6 @@ public class SearcherViewCard extends ListItem {
 
         div.add(image);
 
-        // Создаем элементы header, subtitle, description, badge
         header = new Span();
         header.addClassNames(FontSize.XLARGE, FontWeight.SEMIBOLD);
         header.setText(company);
@@ -45,21 +47,27 @@ public class SearcherViewCard extends ListItem {
         badge.getElement().setAttribute("theme", "badge");
         badge.setText(String.format("%d $", salary));
 
-        Button updateButton = new Button("Update");
-        updateButton.getElement().addEventListener("click", ignore -> {
-            createEditDialog(company, requirements, responsibilities, salary, vacancyId, vacancyService);
-        }).addEventData("event.stopPropagation()");
 
-        Button deleteButton = new Button("Delete");
-        deleteButton.getElement().addEventListener("click", ignore -> {
-            vacancyService.deleteVacancy(vacancyId);
-            this.setVisible(false);
-        }).addEventData("event.stopPropagation()");
+        //Проверяем значение в конструкторе для отображения кнопок (по дефолту true)
+        if(displayButtons) {
+            Button updateButton = new Button("Update");
+            updateButton.getElement().addEventListener("click", ignore -> {
+                createEditDialog(company, requirements, responsibilities, salary, vacancyId, vacancyService);
+            }).addEventData("event.stopPropagation()");
 
-        HorizontalLayout buttonLayout = new HorizontalLayout(updateButton, deleteButton);
-        buttonLayout.setSpacing(true);
+            Button deleteButton = new Button("Delete");
+            deleteButton.getElement().addEventListener("click", ignore -> {
+                vacancyService.deleteVacancy(vacancyId);
+                this.setVisible(false);
+            }).addEventData("event.stopPropagation()");
 
-        add(div, header, subtitle, description, badge, buttonLayout);
+            HorizontalLayout buttonLayout = new HorizontalLayout(updateButton, deleteButton);
+            buttonLayout.setSpacing(true);
+
+            add(div, header, subtitle, description, badge, buttonLayout);
+        } else {
+            add(div, header, subtitle, description, badge);
+        }
 
         // Стили для изменения размера при наведении
         getElement().getStyle()

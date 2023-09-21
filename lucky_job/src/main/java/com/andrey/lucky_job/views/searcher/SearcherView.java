@@ -74,7 +74,8 @@ public class SearcherView extends Composite<VerticalLayout> {
                 vacancy.getResponsibilities(),
                 vacancy.getSalary(),
                 vacancy.getId(),
-                vacancyService
+                vacancyService,
+                true
         );
         card.setWidth("29%"); // Устанавливаем ширину карточки
         cardLayout.getStyle().set("gap", "20px"); // Устанавливаем отступ между карточками
