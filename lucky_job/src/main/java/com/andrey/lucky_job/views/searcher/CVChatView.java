@@ -42,7 +42,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
     private TextField authorField;
     private TextField titleField;
     private TextField textField;
-
     private SearcherViewCard vacancyCard;
     private Div cardContainer;
 
@@ -108,9 +107,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
     private void displayCard(Vacancy vacancy) {
         SearcherViewCard card = createCard(vacancy);
 
-//        setWidth("20%");
-//        setHeight("60%");
-//        getElement().getStyle().set("width", "20%");
         getElement().getStyle().set("height", "100%");
         card.setEnabled(false);
 
@@ -152,10 +148,7 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
 
                 CV cv = new CV(author, title, text, dateOfPublication);
 
-                Paragraph cvMessage = new Paragraph("Author: " + cv.getAuthor() +
-                        ", Title: " + cv.getTitle() +
-                        ", CV: " + cv.getText() +
-                        ", Date of publication: " + cv.getDateOfPublication());
+                Paragraph cvMessage = createMessageParagraph(cv);
 
                 messageListLayout.add(cvMessage);
 
@@ -175,6 +168,28 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         return form;
     }
 
+    private Paragraph createMessageParagraph(CV cv) {
+        Paragraph cvMessage = new Paragraph();
+
+        cvMessage.getElement().setProperty("innerHTML", "Author: " + cv.getAuthor() + "<br>" +
+                "Title: " + cv.getTitle() + "<br>" +
+                "CV: " + cv.getText() + "<br>" +
+                "Date of publication: " + cv.getDateOfPublication());
+
+        cvMessage.getElement().getStyle().set("background-color", "#333366");
+        cvMessage.getElement().getStyle().set("color", "#ffffff");
+
+        cvMessage.getElement().getStyle().set("border-radius", "5px");
+        cvMessage.getElement().getStyle().set("padding", "10px");
+        cvMessage.getElement().getStyle().set("margin-bottom", "10px");
+        cvMessage.getElement().getStyle().set("margin-top", "10px");
+        cvMessage.getElement().getStyle().set("width", "fit-content");
+        cvMessage.getElement().getStyle().set("max-width", "100%");
+        cvMessage.getElement().getStyle().set("word-wrap", "break-word");
+
+        return cvMessage;
+    }
+
     class FooterLayout extends VerticalLayout {
 
         public FooterLayout() {
@@ -185,8 +200,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
             getStyle().set("bottom", "0");
             getStyle().set("left", "0");
             getStyle().set("right", "0");
-
-            // Добавьте эту строку, чтобы добавить отступ снизу
             getStyle().set("margin-bottom", "170px");
 
             add(cvForm);
