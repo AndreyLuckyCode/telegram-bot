@@ -1,6 +1,7 @@
 package com.andrey.lucky_job.views.searcher;
 
 import com.andrey.lucky_job.models.Vacancy;
+import com.andrey.lucky_job.service.CVService;
 import com.andrey.lucky_job.service.VacancyService;
 import com.andrey.lucky_job.views.MainLayout;
 import com.vaadin.flow.component.Composite;
@@ -29,12 +30,15 @@ public class SearcherView extends Composite<VerticalLayout> {
 
     private final VerticalLayout content;
     private final VacancyService vacancyService;
+    private final CVService cvService;
+
     private final FlexLayout cardLayout;
 
     //Даем доступ к сервису
     @Autowired
-    public SearcherView(VacancyService vacancyService) {
+    public SearcherView(VacancyService vacancyService, CVService cvService) {
         this.vacancyService = vacancyService;
+        this.cvService = cvService;
 
         content = getContent();
         content.setHeightFull();
@@ -75,7 +79,9 @@ public class SearcherView extends Composite<VerticalLayout> {
                 vacancy.getSalary(),
                 vacancy.getId(),
                 vacancyService,
-                true
+                true,
+                cvService
+
         );
         card.setWidth("29%"); // Устанавливаем ширину карточки
         cardLayout.getStyle().set("gap", "20px"); // Устанавливаем отступ между карточками

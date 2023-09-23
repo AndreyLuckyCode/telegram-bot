@@ -100,7 +100,8 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
                 vacancy.getSalary(),
                 vacancy.getId(),
                 vacancyService,
-                false
+                false,
+                cvService
         );
     }
 
@@ -146,7 +147,7 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
                 LocalDateTime currentDate = LocalDateTime.now();
                 Date dateOfPublication = new Date();
 
-                CV cv = new CV(author, title, text, dateOfPublication);
+                CV cv = new CV(author, title, text, dateOfPublication, currentVacancy.getId());
 
                 Paragraph cvMessage = createMessageParagraph(cv);
 

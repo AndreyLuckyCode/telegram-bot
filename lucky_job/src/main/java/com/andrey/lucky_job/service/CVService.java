@@ -9,4 +9,5 @@ public interface CVService {
     public void saveCV(CV cv);
     public CV getCV(Long id);
     public void deleteCV(Long id);
+    void deleteAllCVByVacancyId(Long vacancyId);
 }

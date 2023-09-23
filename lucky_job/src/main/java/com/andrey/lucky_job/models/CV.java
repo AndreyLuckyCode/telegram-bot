@@ -13,6 +13,7 @@ public class CV {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private Long vacancyId;
     private String author;
     private String title;
     private String text;
@@ -49,14 +50,21 @@ public class CV {
     public void setDateOfPublication(Date dateOfPublication) {
         this.dateOfPublication = dateOfPublication;
     }
+    public Long getVacancyId() {
+        return vacancyId;
+    }
+    public void setVacancyId(Long vacancyId) {
+        this.vacancyId = vacancyId;
+    }
 
 
     public CV() {
     }
-    public CV(String author, String title, String text, Date dateOfPublication) {
+    public CV(String author, String title, String text, Date dateOfPublication, Long vacancyId) {
         this.author = author;
         this.title = title;
         this.text = text;
         this.dateOfPublication = dateOfPublication;
+        this.vacancyId = vacancyId;
     }
 }

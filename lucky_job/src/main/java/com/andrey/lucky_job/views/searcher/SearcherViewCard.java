@@ -1,6 +1,7 @@
 package com.andrey.lucky_job.views.searcher;
 
 import com.andrey.lucky_job.models.Vacancy;
+import com.andrey.lucky_job.service.CVService;
 import com.andrey.lucky_job.service.VacancyService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -8,6 +9,7 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class SearcherViewCard extends ListItem {
     private boolean displayButtons;
@@ -15,11 +17,13 @@ public class SearcherViewCard extends ListItem {
     private Span subtitle;
     private Paragraph description;
     private Span badge;
-
-    public SearcherViewCard(String company, String requirements, String responsibilities, int salary, Long vacancyId, VacancyService vacancyService, boolean displayButtons) {
+    @Autowired
+    private final CVService cvService;
+    public SearcherViewCard(String company, String requirements, String responsibilities, int salary, Long vacancyId, VacancyService vacancyService, boolean displayButtons, CVService cvService) {
         addClassNames(Background.CONTRAST_5, Display.FLEX, FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
                 BorderRadius.LARGE);
         this.displayButtons = displayButtons;
+        this.cvService = cvService;
 
 
         Div div = new Div();
@@ -57,6 +61,7 @@ public class SearcherViewCard extends ListItem {
 
             Button deleteButton = new Button("Delete");
             deleteButton.getElement().addEventListener("click", ignore -> {
+                cvService.deleteAllCVByVacancyId(vacancyId);
                 vacancyService.deleteVacancy(vacancyId);
                 this.setVisible(false);
             }).addEventData("event.stopPropagation()");
