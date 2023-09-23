@@ -24,6 +24,7 @@ import com.vaadin.flow.router.BeforeEvent;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Route(value = "cv-chat", layout = MainLayout.class)
 @Component
@@ -46,6 +47,7 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
     private Div cardContainer;
 
 
+    // Шаблон страницы
     public CVChatView(@Autowired CVService cvService, @Autowired VacancyService vacancyService) {
         this.cvService = cvService;
         this.vacancyService = vacancyService;
@@ -82,6 +84,8 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         add(contentLayout);
     }
 
+
+    // Заполнение страницы и ссылки
     @Override
     public void setParameter(BeforeEvent event, @OptionalParameter Long vacancyId) {
         if (vacancyId != null) {
@@ -89,9 +93,12 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
             vacancyCard = createCard(currentVacancy);
             cardContainer = new Div(vacancyCard);
             displayCard(currentVacancy);
+            displayCVsForVacancy(currentVacancy.getId());
         }
     }
 
+
+    // Конструктор карточки
     private SearcherViewCard createCard(Vacancy vacancy) {
         return new SearcherViewCard(
                 vacancy.getCompany(),
@@ -105,6 +112,8 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         );
     }
 
+
+    // Расположение и отображение карточки
     private void displayCard(Vacancy vacancy) {
         SearcherViewCard card = createCard(vacancy);
 
@@ -123,6 +132,8 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         contentLayout.add(mainLayout, bottomLayout);
     }
 
+
+    // Форма для отправки CV
     private FormLayout createCVForm() {
         FormLayout form = new FormLayout();
         form.setWidth("300px");
@@ -169,6 +180,8 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         return form;
     }
 
+
+    // Сообщение
     private Paragraph createMessageParagraph(CV cv) {
         Paragraph cvMessage = new Paragraph();
 
@@ -191,6 +204,18 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         return cvMessage;
     }
 
+
+    // Достаем и отображаем все имеющиеся CV
+    private void displayCVsForVacancy(Long vacancyId) {
+        List<CV> cvList = cvService.getCVsForVacancy(vacancyId);
+
+        for (CV cv : cvList) {
+            Paragraph cvMessage = createMessageParagraph(cv);
+            messageListLayout.add(cvMessage);
+        }
+    }
+
+
     class FooterLayout extends VerticalLayout {
 
         public FooterLayout() {
@@ -206,4 +231,5 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
             add(cvForm);
         }
     }
+
 }

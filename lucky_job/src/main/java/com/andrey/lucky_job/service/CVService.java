@@ -10,4 +10,5 @@ public interface CVService {
     public CV getCV(Long id);
     public void deleteCV(Long id);
     void deleteAllCVByVacancyId(Long vacancyId);
+    List<CV> getCVsForVacancy(Long vacancyId);
 }

@@ -38,5 +38,8 @@ public class CVServiceImpl implements CVService{
     public void deleteAllCVByVacancyId(Long vacancyId) {
         cvRepository.deleteAllCVByVacancyId(vacancyId);
     }
-
+    @Override
+    public List<CV> getCVsForVacancy(Long vacancyId) {
+        return cvRepository.findByVacancyId(vacancyId);
+    }
 }
