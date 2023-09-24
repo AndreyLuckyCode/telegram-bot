@@ -6,22 +6,29 @@ import com.andrey.lucky_job.service.CVService;
 import com.andrey.lucky_job.service.VacancyService;
 import com.andrey.lucky_job.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import com.vaadin.flow.router.BeforeEvent;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +52,9 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
     private TextField textField;
     private SearcherViewCard vacancyCard;
     private Div cardContainer;
+    private Upload upload;
+    private MemoryBuffer buffer;
+
 
 
     // Шаблон страницы
@@ -138,6 +148,12 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         FormLayout form = new FormLayout();
         form.setWidth("300px");
 
+        buffer = new MemoryBuffer();
+        upload = new Upload(buffer);
+        upload.setAcceptedFileTypes("image/jpeg", "image/png");
+        upload.setMaxFileSize(5 * 1024 * 1024); // размер файла до 5 МБ
+        upload.setAutoUpload(true);
+
         form.getElement().getStyle().set("position", "absolute");
         form.getElement().getStyle().set("left", "50%");
         form.getElement().getStyle().set("transform", "translateX(-50%)");
@@ -147,18 +163,24 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         textField = new TextField("CV");
         Button submitButton = new Button("Send");
 
-        form.add(authorField, titleField, textField, submitButton);
+        form.add(authorField, titleField, upload, submitButton);
 
         submitButton.addClickListener(event -> {
             String author = authorField.getValue();
             String title = titleField.getValue();
             String text = textField.getValue();
 
-            if (!author.isEmpty() && !title.isEmpty() && !text.isEmpty()) {
+            if (!author.isEmpty() && !title.isEmpty() && buffer.getInputStream() != null)  {
                 LocalDateTime currentDate = LocalDateTime.now();
                 Date dateOfPublication = new Date();
 
-                CV cv = new CV(author, title, text, dateOfPublication, currentVacancy.getId());
+                byte[] imageData = new byte[0];
+                try {
+                    imageData = buffer.getInputStream().readAllBytes();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                CV cv = new CV(author, title, imageData, dateOfPublication, currentVacancy.getId());
 
                 Paragraph cvMessage = createMessageParagraph(cv);
 
@@ -184,11 +206,15 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
     // Сообщение
     private Paragraph createMessageParagraph(CV cv) {
         Paragraph cvMessage = new Paragraph();
+        Div content = new Div();
 
-        cvMessage.getElement().setProperty("innerHTML", "Author: " + cv.getAuthor() + "<br>" +
+        content.getElement().setProperty("innerHTML", "Author: " + cv.getAuthor() + "<br>" +
                 "Title: " + cv.getTitle() + "<br>" +
-                "CV: " + cv.getText() + "<br>" +
                 "Date of publication: " + cv.getDateOfPublication());
+
+        cvMessage.getStyle().set("border", "1px solid black")
+                .set("padding", "10px")
+                .set("margin", "10px");
 
         cvMessage.getElement().getStyle().set("background-color", "#333366");
         cvMessage.getElement().getStyle().set("color", "#ffffff");
@@ -201,6 +227,17 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         cvMessage.getElement().getStyle().set("max-width", "100%");
         cvMessage.getElement().getStyle().set("word-wrap", "break-word");
 
+        if (cv.getImageData() != null) {
+            StreamResource resource = new StreamResource("image.png", () -> new ByteArrayInputStream(cv.getImageData()));
+            Image image = new Image(resource, "Uploaded image");
+            image.setWidth("100px");
+
+            image.addClickListener(event -> createImageDialog(image));
+            cvMessage.add(content, image);
+        } else {
+            cvMessage.add(content);
+        }
+
         return cvMessage;
     }
 
@@ -209,10 +246,24 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
     private void displayCVsForVacancy(Long vacancyId) {
         List<CV> cvList = cvService.getCVsForVacancy(vacancyId);
 
+        messageListLayout.removeAll();
+
         for (CV cv : cvList) {
             Paragraph cvMessage = createMessageParagraph(cv);
             messageListLayout.add(cvMessage);
         }
+    }
+
+    private void createImageDialog(Image image) {
+        Dialog imageDialog = new Dialog();
+        Image enlargedImage = new Image(image.getSrc(), String.valueOf(image.getAlt()));
+        enlargedImage.setWidth("100%");
+        imageDialog.add(enlargedImage);
+        imageDialog.setWidth("70%");
+        imageDialog.setHeight("90%");
+        imageDialog.setCloseOnEsc(true);
+        imageDialog.setCloseOnOutsideClick(true);
+        imageDialog.open();
     }
 
 

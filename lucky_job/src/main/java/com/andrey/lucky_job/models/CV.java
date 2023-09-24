@@ -1,9 +1,6 @@
 package com.andrey.lucky_job.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
@@ -16,7 +13,9 @@ public class CV {
     private Long vacancyId;
     private String author;
     private String title;
-    private String text;
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private byte[] imageData;
     private Date dateOfPublication;
 
 
@@ -38,12 +37,16 @@ public class CV {
     public void setTitle(String title) {
         this.title = title;
     }
-    public String getText() {
-        return text;
+
+
+    public byte[] getImageData() {
+        return imageData;
     }
-    public void setText(String text) {
-        this.text = text;
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
     }
+
+
     public Date getDateOfPublication() {
         return dateOfPublication;
     }
@@ -60,10 +63,10 @@ public class CV {
 
     public CV() {
     }
-    public CV(String author, String title, String text, Date dateOfPublication, Long vacancyId) {
+    public CV(String author, String title, byte [] imageData, Date dateOfPublication, Long vacancyId) {
         this.author = author;
         this.title = title;
-        this.text = text;
+        this.imageData = imageData;
         this.dateOfPublication = dateOfPublication;
         this.vacancyId = vacancyId;
     }
