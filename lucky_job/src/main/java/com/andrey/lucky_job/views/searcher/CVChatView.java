@@ -54,8 +54,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
     private Upload upload;
     private MemoryBuffer buffer;
 
-
-
     // Шаблон страницы
     public CVChatView(@Autowired CVService cvService, @Autowired VacancyService vacancyService) {
         this.cvService = cvService;
@@ -68,7 +66,7 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         contentLayout = new VerticalLayout();
 
         messageListLayout = new VerticalLayout();
-        messageListLayout.getElement().getStyle().set("max-height", "calc(100vh - 400px)");
+        messageListLayout.getElement().getStyle().set("max-height", "calc(100vh - 200px)");
         messageListLayout.getElement().getStyle().set("overflow-y", "auto");
         messageListLayout.setWidthFull();
 
@@ -93,7 +91,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         add(contentLayout);
     }
 
-
     // Заполнение страницы и ссылки
     @Override
     public void setParameter(BeforeEvent event, @OptionalParameter Long vacancyId) {
@@ -105,7 +102,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
             displayCVsForVacancy(currentVacancy.getId());
         }
     }
-
 
     // Конструктор карточки
     private SearcherViewCard createCard(Vacancy vacancy) {
@@ -120,7 +116,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
                 cvService
         );
     }
-
 
     // Расположение и отображение карточки
     private void displayCard(Vacancy vacancy) {
@@ -141,7 +136,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         contentLayout.add(mainLayout, bottomLayout);
     }
 
-
     // Форма для отправки CV
     private FormLayout createCVForm() {
         FormLayout form = new FormLayout();
@@ -153,9 +147,10 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         upload.setMaxFileSize(5 * 1024 * 1024); // размер файла до 5 МБ
         upload.setAutoUpload(true);
 
-        form.getElement().getStyle().set("position", "absolute");
-        form.getElement().getStyle().set("left", "50%");
-        form.getElement().getStyle().set("transform", "translateX(-50%)");
+        form.getElement().getStyle().set("position", "fixed");
+        form.getElement().getStyle().set("top", "70%");
+        form.getElement().getStyle().set("right", "-5%");
+        form.getElement().getStyle().set("transform", "translate(-50%, -50%)");
 
         authorField = new TextField("Author");
         titleField = new TextField("Title");
@@ -198,7 +193,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         return form;
     }
 
-
     // Сообщение
     private Paragraph createMessageParagraph(CV cv) {
         Paragraph cvMessage = new Paragraph();
@@ -237,7 +231,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         return cvMessage;
     }
 
-
     // Достаем и отображаем все имеющиеся CV
     private void displayCVsForVacancy(Long vacancyId) {
         List<CV> cvList = cvService.getCVsForVacancy(vacancyId);
@@ -249,7 +242,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
             messageListLayout.add(cvMessage);
         }
     }
-
 
     // Развернутое изображение
     private void createImageDialog(Image image) {
@@ -277,7 +269,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         imageDialog.open();
     }
 
-
     class FooterLayout extends VerticalLayout {
 
         public FooterLayout() {
@@ -287,10 +278,8 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
             getStyle().set("position", "fixed");
             getStyle().set("bottom", "0");
             getStyle().set("left", "0");
-            getStyle().set("right", "0");
-            getStyle().set("margin-bottom", "170px");
 
-            add(cvForm);
+            add(cvForm, postButton);
         }
     }
 
