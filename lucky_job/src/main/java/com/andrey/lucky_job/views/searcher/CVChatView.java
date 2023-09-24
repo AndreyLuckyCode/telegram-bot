@@ -49,7 +49,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
     private final Button postButton;
     private TextField authorField;
     private TextField titleField;
-    private TextField textField;
     private SearcherViewCard vacancyCard;
     private Div cardContainer;
     private Upload upload;
@@ -160,7 +159,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
 
         authorField = new TextField("Author");
         titleField = new TextField("Title");
-        textField = new TextField("CV");
         Button submitButton = new Button("Send");
 
         form.add(authorField, titleField, upload, submitButton);
@@ -168,7 +166,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         submitButton.addClickListener(event -> {
             String author = authorField.getValue();
             String title = titleField.getValue();
-            String text = textField.getValue();
 
             if (!author.isEmpty() && !title.isEmpty() && buffer.getInputStream() != null)  {
                 LocalDateTime currentDate = LocalDateTime.now();
@@ -190,7 +187,6 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
 
                 authorField.clear();
                 titleField.clear();
-                textField.clear();
 
                 cvForm.setVisible(false); // Скрыть форму после успешной отправки
                 postButton.setVisible(true); // Показать кнопку "Post" снова
@@ -254,13 +250,28 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         }
     }
 
+
+    // Развернутое изображение
     private void createImageDialog(Image image) {
         Dialog imageDialog = new Dialog();
         Image enlargedImage = new Image(image.getSrc(), String.valueOf(image.getAlt()));
-        enlargedImage.setWidth("100%");
-        imageDialog.add(enlargedImage);
-        imageDialog.setWidth("70%");
-        imageDialog.setHeight("90%");
+
+        enlargedImage.setWidth("auto");
+        enlargedImage.setHeight("auto");
+        enlargedImage.getElement().getStyle().set("max-width", "100%");
+        enlargedImage.getElement().getStyle().set("max-height", "100%");
+        enlargedImage.getElement().getStyle().set("object-fit", "contain");
+
+        VerticalLayout verticalLayout = new VerticalLayout(enlargedImage);
+        verticalLayout.setSizeFull();
+        verticalLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+        verticalLayout.setAlignItems(Alignment.CENTER);
+        verticalLayout.getElement().getStyle().set("padding", "0");
+        verticalLayout.getElement().getStyle().set("margin", "0");
+
+        imageDialog.add(verticalLayout);
+        imageDialog.setWidth("45%");
+        imageDialog.setHeight("120%");
         imageDialog.setCloseOnEsc(true);
         imageDialog.setCloseOnOutsideClick(true);
         imageDialog.open();
