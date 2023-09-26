@@ -155,8 +155,9 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         authorField = new TextField("Author");
         titleField = new TextField("Title");
         Button submitButton = new Button("Send");
+        Button closeButton = new Button("Close");
 
-        form.add(authorField, titleField, upload, submitButton);
+        form.add(authorField, titleField, upload, submitButton, closeButton);
 
         submitButton.addClickListener(event -> {
             String author = authorField.getValue();
@@ -188,6 +189,12 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
             } else {
                 Notification.show("Fields cannot be empty");
             }
+        });
+
+        // Обработчик события для кнопки закрытия
+        closeButton.addClickListener(event -> {
+            cvForm.setVisible(false); // Скрыть форму
+            postButton.setVisible(true); // Показать кнопку "Post" снова
         });
 
         return form;
