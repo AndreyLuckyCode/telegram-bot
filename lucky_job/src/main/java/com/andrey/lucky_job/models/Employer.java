@@ -17,9 +17,10 @@ public class Employer {
     private String name;
     private String surname;
     private LocalDate dateOfBirth;
-    private String phoneNumber;
-    @Email
+    //    @Email(message = "должно иметь формат адреса электронной почты")
+    //    @NotBlank(message = "Email не может быть пустым")
     private String email;
+    private String phoneNumber;
     private String role;
 
 
@@ -69,7 +70,7 @@ public class Employer {
 
     public Employer() {
     }
-    public Employer(String name, String surname, LocalDate dateOfBirth, String phoneNumber, String email, String role) {
+    public Employer(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role) {
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;

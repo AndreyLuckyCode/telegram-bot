@@ -1,5 +1,9 @@
 package com.andrey.lucky_job.views.signup;
 
+import com.andrey.lucky_job.models.Employer;
+import com.andrey.lucky_job.models.Searcher;
+import com.andrey.lucky_job.service.EmployerService;
+import com.andrey.lucky_job.service.SearcherService;
 import com.andrey.lucky_job.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
@@ -17,11 +21,17 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
+import java.time.LocalDate;
+
 @PageTitle("Sign up")
 @Route(value = "registration", layout = MainLayout.class)
 public class SignupView extends Composite<VerticalLayout> {
 
-    public SignupView() {
+    private final EmployerService employerService;
+    private final SearcherService searcherService;
+    public SignupView(EmployerService employerService, SearcherService searcherService) {
+        this.employerService = employerService;
+        this.searcherService = searcherService;
         VerticalLayout layout = createLayout();
         getContent().add(layout);
     }
@@ -47,7 +57,30 @@ public class SignupView extends Composite<VerticalLayout> {
         occupationRadioGroup.setItems("Searcher", "Employer");
 
         Button saveButton = createButton("Save", ButtonVariant.LUMO_PRIMARY);
+        saveButton.addClickListener(event -> {
+            LocalDate dateOfBirth = birthdayDatePicker.getValue();
+            String firstName = firstNameField.getValue();
+            String lastName = lastNameField.getValue();
+            String email = emailField.getValue();
+            String phoneNumber = phoneNumberField.getValue();
+            String role = occupationRadioGroup.getValue();
+
+            if (firstName.isEmpty() || lastName.isEmpty() || dateOfBirth == null || email.isEmpty() || phoneNumber.isEmpty() || role == null) {
+                // ДОПИСАТЬ УВЕДОМЛЕНИЯ ОБ ОШИБКЕ И ЛОГИКУ
+                return;
+            }
+            saveUser(firstName, lastName, dateOfBirth, email, phoneNumber, role);
+        });
+
         Button cancelButton = createButton("Cancel");
+        cancelButton.addClickListener(event -> {
+            firstNameField.clear();
+            lastNameField.clear();
+            emailField.clear();
+            phoneNumberField.clear();
+            birthdayDatePicker.clear();
+            occupationRadioGroup.clear();
+        });
 
         layout.add(heading, row1, row2);
 
@@ -95,4 +128,23 @@ public class SignupView extends Composite<VerticalLayout> {
         button.addThemeVariants(variants);
         return button;
     }
+
+    private void saveUser(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role) {
+        if (role.equals("Employer")) {
+            saveEmployer(name, surname, dateOfBirth, email, phoneNumber, role);
+        } else {
+            saveSearcher(name, surname, dateOfBirth, email, phoneNumber, role);
+        }
+    }
+
+    private void saveEmployer(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role) {
+        Employer employer = new Employer(name, surname, dateOfBirth, email, phoneNumber, role);
+        employerService.saveEmployer(employer);
+    }
+
+    private void saveSearcher(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role)  {
+        Searcher searcher = new Searcher(name, surname, dateOfBirth, email, phoneNumber, role);
+        searcherService.saveSearcher(searcher);
+    }
+
 }
