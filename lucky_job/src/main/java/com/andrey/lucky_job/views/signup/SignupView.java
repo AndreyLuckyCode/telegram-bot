@@ -142,6 +142,12 @@ public class SignupView extends Composite<VerticalLayout> {
     }
 
     private void saveUser(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role, String password) {
+
+        if (!isPasswordUnique(password)) {
+            Notification.show("Please use a different password.");
+            return;
+        }
+
         if (role.equals("Employer")) {
             saveEmployer(name, surname, dateOfBirth, email, phoneNumber, role, password);
         } else {
@@ -177,4 +183,7 @@ public class SignupView extends Composite<VerticalLayout> {
         }
     }
 
+    private boolean isPasswordUnique(String password) {
+        return employerService.isPasswordUnique(password) && searcherService.isPasswordUnique(password);
+    }
 }

@@ -12,4 +12,5 @@ public interface EmployerService {
     public Employer getEmployer(Long id);
     public void deleteEmployer(Long id);
     public Employer findEmployerByNameAndPassword(String name, String password);
+    public boolean isPasswordUnique(String password);
 }

@@ -40,9 +40,12 @@ public class EmployerServiceImpl implements EmployerService{
     public void deleteEmployer(Long id) {
         employerRepository.deleteById(id);
     }
-
     @Override
     public Employer findEmployerByNameAndPassword(String name, String password) {
         return employerRepository.findByNameAndPassword(name, password);
+    }
+    @Override
+    public boolean isPasswordUnique(String password) {
+        return !employerRepository.existsByPassword(password);
     }
 }

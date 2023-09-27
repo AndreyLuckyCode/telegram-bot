@@ -44,5 +44,8 @@ public class SearcherServiceImpl implements SearcherService{
     public Searcher findSearcherByNameAndPassword(String name, String password) {
         return searcherRepository.findByNameAndPassword(name, password);
     }
-
+    @Override
+    public boolean isPasswordUnique(String password) {
+        return !searcherRepository.existsByPassword(password);
+    }
 }
