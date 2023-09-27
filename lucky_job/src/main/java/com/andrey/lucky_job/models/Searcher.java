@@ -21,6 +21,7 @@ public class Searcher {
     private String email;
     private String phoneNumber;
     private String role;
+    private String password;
 
 
     public Long getId() {
@@ -65,16 +66,22 @@ public class Searcher {
     public void setRole(String role) {
         this.role = role;
     }
-
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public Searcher() {
     }
-    public Searcher(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role) {
+    public Searcher(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role, String password) {
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.role = role;
+        this.password = password;
     }
 }

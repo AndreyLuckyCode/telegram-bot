@@ -14,6 +14,7 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.EmailField;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -46,12 +47,15 @@ public class SignupView extends Composite<VerticalLayout> {
 
         HorizontalLayout row1 = createRow();
         HorizontalLayout row2 = createRow();
+        HorizontalLayout row3 = createRow();
+        HorizontalLayout row4 = createRow();
 
         TextField firstNameField = createTextField("First Name");
         DatePicker birthdayDatePicker = createDatePicker("Birthday");
         EmailField emailField = createEmailField("Email");
         TextField lastNameField = createTextField("Last Name");
         TextField phoneNumberField = createTextField("Phone Number");
+        PasswordField passwordField = createPasswordField("Password");
 
         RadioButtonGroup<String> occupationRadioGroup = new RadioButtonGroup<>();
         occupationRadioGroup.setLabel("Choose your role");
@@ -65,12 +69,13 @@ public class SignupView extends Composite<VerticalLayout> {
             String email = emailField.getValue();
             String phoneNumber = phoneNumberField.getValue();
             String role = occupationRadioGroup.getValue();
+            String password = passwordField.getValue();
 
             if (firstName.isEmpty() || lastName.isEmpty() || dateOfBirth == null || email.isEmpty() || phoneNumber.isEmpty() || role == null) {
                 Notification.show("Fields cannot be empty");
                 return;
             }
-            saveUser(firstName, lastName, dateOfBirth, email, phoneNumber, role);
+            saveUser(firstName, lastName, dateOfBirth, email, phoneNumber, role, password);
         });
 
         Button cancelButton = createButton("Cancel");
@@ -83,12 +88,12 @@ public class SignupView extends Composite<VerticalLayout> {
             occupationRadioGroup.clear();
         });
 
-        layout.add(heading, row1, row2);
+        layout.add(heading, row1, row2, row3, row4);
 
         row1.add(createColumn(firstNameField, birthdayDatePicker, emailField));
-        row1.add(createColumn(lastNameField, phoneNumberField, occupationRadioGroup));
-
-        row2.add(saveButton, cancelButton);
+        row1.add(createColumn(lastNameField, phoneNumberField, passwordField));
+        row2.add(createColumn(occupationRadioGroup));
+        row4.add(saveButton, cancelButton);
 
         return layout;
     }
@@ -124,23 +129,29 @@ public class SignupView extends Composite<VerticalLayout> {
         return emailField;
     }
 
+    private PasswordField createPasswordField(String label){
+        PasswordField passwordField = new PasswordField(label);
+        passwordField.setWidthFull();
+        return passwordField;
+    }
+
     private Button createButton(String text, ButtonVariant... variants) {
         Button button = new Button(text);
         button.addThemeVariants(variants);
         return button;
     }
 
-    private void saveUser(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role) {
+    private void saveUser(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role, String password) {
         if (role.equals("Employer")) {
-            saveEmployer(name, surname, dateOfBirth, email, phoneNumber, role);
+            saveEmployer(name, surname, dateOfBirth, email, phoneNumber, role, password);
         } else {
-            saveSearcher(name, surname, dateOfBirth, email, phoneNumber, role);
+            saveSearcher(name, surname, dateOfBirth, email, phoneNumber, role, password);
         }
     }
 
-    private void saveEmployer(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role) {
+    private void saveEmployer(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role, String password) {
         try {
-            Employer employer = new Employer(name, surname, dateOfBirth, email, phoneNumber, role);
+            Employer employer = new Employer(name, surname, dateOfBirth, email, phoneNumber, role, password);
             boolean isSaved = employerService.saveEmployer(employer);
             if (isSaved) {
                 Notification.show("Welcome, employer!");
@@ -152,9 +163,9 @@ public class SignupView extends Composite<VerticalLayout> {
         }
     }
 
-    private void saveSearcher(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role) {
+    private void saveSearcher(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role, String password) {
         try {
-            Searcher searcher = new Searcher(name, surname, dateOfBirth, email, phoneNumber, role);
+            Searcher searcher = new Searcher(name, surname, dateOfBirth, email, phoneNumber, role, password);
             boolean isSaved = searcherService.saveSearcher(searcher);
             if (isSaved) {
                 Notification.show("Welcome, searcher!");
