@@ -5,7 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 
@@ -18,8 +17,7 @@ public class Searcher {
     private String name;
     private String surname;
     private LocalDate dateOfBirth;
-    //    @Email(message = "должно иметь формат адреса электронной почты")
-    //    @NotBlank(message = "Email не может быть пустым")
+    @Email(message = "Bad format")
     private String email;
     private String phoneNumber;
     private String role;

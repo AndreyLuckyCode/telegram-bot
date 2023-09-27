@@ -2,6 +2,7 @@ package com.andrey.lucky_job.service;
 
 import com.andrey.lucky_job.dao.EmployerRepository;
 import com.andrey.lucky_job.models.Employer;
+import com.vaadin.flow.component.notification.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,14 @@ public class EmployerServiceImpl implements EmployerService{
         return employerRepository.findAll();
     }
     @Override
-    public void saveEmployer(Employer employer) {
-        employerRepository.save(employer);
+    public boolean saveEmployer(Employer employer) {
+        try {
+            employerRepository.save(employer);
+            return true;
+        } catch (Exception e) {
+            Notification.show("Error");
+            return false;
+        }
     }
     @Override
     public Employer getEmployer(Long id) {

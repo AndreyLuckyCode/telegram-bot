@@ -31,7 +31,7 @@ public class EmployerView extends Composite<VerticalLayout> {
         Button buttonPrimary = new Button();
         H3 h3 = new H3();
         Grid<Searcher> basicGrid = new Grid<>(Searcher.class);
-        basicGrid.setColumns("id", "name", "surname", "dateOfBirth", "phoneNumber", "email", "role");
+        basicGrid.setColumns("name", "surname", "dateOfBirth", "phoneNumber", "email", "role");
 
         getContent().setHeightFull();
         getContent().setWidthFull();

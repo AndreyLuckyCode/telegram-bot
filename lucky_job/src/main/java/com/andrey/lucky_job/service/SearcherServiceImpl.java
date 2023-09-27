@@ -2,6 +2,7 @@ package com.andrey.lucky_job.service;
 
 import com.andrey.lucky_job.dao.SearcherRepository;
 import com.andrey.lucky_job.models.Searcher;
+import com.vaadin.flow.component.notification.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +19,14 @@ public class SearcherServiceImpl implements SearcherService{
     public List<Searcher> getAllSearchers() {
         return searcherRepository.findAll();
     }
-    @Override
-    public void saveSearcher(Searcher searcher) {
-        searcherRepository.save(searcher);
+    public boolean saveSearcher(Searcher searcher) {
+        try {
+            searcherRepository.save(searcher);
+            return true;
+        } catch (Exception e) {
+            Notification.show("Error");
+            return false;
+        }
     }
     @Override
     public Searcher getSearcher(Long id) {

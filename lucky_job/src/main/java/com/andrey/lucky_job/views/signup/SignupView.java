@@ -11,6 +11,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -66,7 +67,7 @@ public class SignupView extends Composite<VerticalLayout> {
             String role = occupationRadioGroup.getValue();
 
             if (firstName.isEmpty() || lastName.isEmpty() || dateOfBirth == null || email.isEmpty() || phoneNumber.isEmpty() || role == null) {
-                // ДОПИСАТЬ УВЕДОМЛЕНИЯ ОБ ОШИБКЕ И ЛОГИКУ
+                Notification.show("Fields cannot be empty");
                 return;
             }
             saveUser(firstName, lastName, dateOfBirth, email, phoneNumber, role);
@@ -138,13 +139,31 @@ public class SignupView extends Composite<VerticalLayout> {
     }
 
     private void saveEmployer(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role) {
-        Employer employer = new Employer(name, surname, dateOfBirth, email, phoneNumber, role);
-        employerService.saveEmployer(employer);
+        try {
+            Employer employer = new Employer(name, surname, dateOfBirth, email, phoneNumber, role);
+            boolean isSaved = employerService.saveEmployer(employer);
+            if (isSaved) {
+                Notification.show("Welcome, employer!");
+            } else {
+                Notification.show("Error: Could not save employer. Please check the entered data.");
+            }
+        } catch (Exception e) {
+            Notification.show("Error: Could not save employer. Please check the entered data.");
+        }
     }
 
-    private void saveSearcher(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role)  {
-        Searcher searcher = new Searcher(name, surname, dateOfBirth, email, phoneNumber, role);
-        searcherService.saveSearcher(searcher);
+    private void saveSearcher(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role) {
+        try {
+            Searcher searcher = new Searcher(name, surname, dateOfBirth, email, phoneNumber, role);
+            boolean isSaved = searcherService.saveSearcher(searcher);
+            if (isSaved) {
+                Notification.show("Welcome, searcher!");
+            } else {
+                Notification.show("Error: Could not save searcher. Please check the entered data.");
+            }
+        } catch (Exception e) {
+            Notification.show("Error: Could not save searcher. Please check the entered data.");
+        }
     }
 
 }

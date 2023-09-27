@@ -17,8 +17,7 @@ public class Employer {
     private String name;
     private String surname;
     private LocalDate dateOfBirth;
-    //    @Email(message = "должно иметь формат адреса электронной почты")
-    //    @NotBlank(message = "Email не может быть пустым")
+    @Email(message = "Bad format")
     private String email;
     private String phoneNumber;
     private String role;

@@ -8,7 +8,7 @@ import java.util.List;
 public interface EmployerService {
     public List<Employer> getAllEmployers();
     @Transactional
-    public void saveEmployer(Employer employer);
+    public boolean saveEmployer(Employer employer);
     public Employer getEmployer(Long id);
     public void deleteEmployer(Long id);
 }

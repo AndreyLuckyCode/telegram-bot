@@ -9,7 +9,7 @@ public interface SearcherService {
 
     public List<Searcher> getAllSearchers();
     @Transactional
-    public void saveSearcher(Searcher searcher);
+    public boolean saveSearcher(Searcher searcher);
     public Searcher getSearcher(Long id);
     public void deleteSearcher(Long id);
 }
