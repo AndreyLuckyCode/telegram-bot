@@ -48,4 +48,8 @@ public class SearcherServiceImpl implements SearcherService{
     public boolean isPasswordUnique(String password) {
         return !searcherRepository.existsByPassword(password);
     }
+    @Override
+    public boolean isEmailUnique(String email) {
+        return !searcherRepository.existsByEmail(email);
+    }
 }

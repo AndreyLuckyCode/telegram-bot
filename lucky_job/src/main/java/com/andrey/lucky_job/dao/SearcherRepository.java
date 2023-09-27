@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SearcherRepository extends JpaRepository<Searcher, Long> {
         Searcher findByNameAndPassword(String name, String password);
         boolean existsByPassword(String password);
+        boolean existsByEmail(String email);
 }

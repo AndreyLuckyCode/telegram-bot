@@ -10,6 +10,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.login.LoginForm;
+import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -31,6 +32,11 @@ public class SigninView extends Composite<VerticalLayout> {
         this.searcherService = searcherService;
 
         LoginForm loginForm = new LoginForm();
+        LoginI18n i18n = LoginI18n.createDefault();
+        i18n.getForm().setUsername("Email");
+        i18n.getErrorMessage().setTitle("Email is required");
+        i18n.getErrorMessage().setMessage("Email is required. Please enter your email.");
+        loginForm.setI18n(i18n);
         getContent().setHeightFull();
         getContent().setWidthFull();
         getContent().setAlignSelf(FlexComponent.Alignment.CENTER, loginForm);

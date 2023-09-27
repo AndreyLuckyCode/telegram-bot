@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface EmployerRepository extends JpaRepository<Employer, Long> {
         Employer findByNameAndPassword(String name, String password);
         boolean existsByPassword(String password);
+        boolean existsByEmail(String email);
 }

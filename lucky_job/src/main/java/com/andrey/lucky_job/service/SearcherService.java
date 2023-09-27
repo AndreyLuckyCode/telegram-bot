@@ -15,4 +15,5 @@ public interface SearcherService {
     public void deleteSearcher(Long id);
     public Searcher findSearcherByNameAndPassword(String name, String password);
     public boolean isPasswordUnique(String password);
+    public boolean isEmailUnique(String email);
 }

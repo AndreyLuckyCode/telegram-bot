@@ -48,4 +48,8 @@ public class EmployerServiceImpl implements EmployerService{
     public boolean isPasswordUnique(String password) {
         return !employerRepository.existsByPassword(password);
     }
+    @Override
+    public boolean isEmailUnique(String email) {
+        return !employerRepository.existsByEmail(email);
+    }
 }

@@ -148,6 +148,11 @@ public class SignupView extends Composite<VerticalLayout> {
             return;
         }
 
+        if (!isEmailUnique(email)){
+            Notification.show("This email is already in use");
+            return;
+        }
+
         if (role.equals("Employer")) {
             saveEmployer(name, surname, dateOfBirth, email, phoneNumber, role, password);
         } else {
@@ -185,5 +190,8 @@ public class SignupView extends Composite<VerticalLayout> {
 
     private boolean isPasswordUnique(String password) {
         return employerService.isPasswordUnique(password) && searcherService.isPasswordUnique(password);
+    }
+    private boolean isEmailUnique(String email){
+        return employerService.isEmailUnique(email) && searcherService.isEmailUnique(email);
     }
 }
