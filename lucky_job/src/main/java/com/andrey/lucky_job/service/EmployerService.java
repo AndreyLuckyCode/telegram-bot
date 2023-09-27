@@ -11,7 +11,7 @@ public interface EmployerService {
     public boolean saveEmployer(Employer employer);
     public Employer getEmployer(Long id);
     public void deleteEmployer(Long id);
-    public Employer findEmployerByNameAndPassword(String name, String password);
+    public Employer findEmployerByEmailAndPassword(String email, String password);
     public boolean isPasswordUnique(String password);
     public boolean isEmailUnique(String email);
 }

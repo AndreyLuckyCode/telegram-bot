@@ -41,8 +41,8 @@ public class SearcherServiceImpl implements SearcherService{
         searcherRepository.deleteById(id);
     }
     @Override
-    public Searcher findSearcherByNameAndPassword(String name, String password) {
-        return searcherRepository.findByNameAndPassword(name, password);
+    public Searcher findSearcherByEmailAndPassword(String email, String password) {
+        return searcherRepository.findByEmailAndPassword(email, password);
     }
     @Override
     public boolean isPasswordUnique(String password) {

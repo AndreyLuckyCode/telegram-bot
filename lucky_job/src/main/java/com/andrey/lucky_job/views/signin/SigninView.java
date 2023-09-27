@@ -27,6 +27,8 @@ public class SigninView extends Composite<VerticalLayout> {
     private EmployerService employerService;
     @Autowired
     private SearcherService searcherService;
+
+
     public SigninView(EmployerService employerService, SearcherService searcherService) {
         this.employerService = employerService;
         this.searcherService = searcherService;
@@ -44,12 +46,9 @@ public class SigninView extends Composite<VerticalLayout> {
 
         loginForm.addLoginListener(event -> authenticate(event.getUsername(), event.getPassword(), event));
     }
-
-
-
-    private void authenticate(String name, String password, LoginForm.LoginEvent event) {
-        Employer employer = employerService.findEmployerByNameAndPassword(name, password);
-        Searcher searcher = searcherService.findSearcherByNameAndPassword(name, password);
+    private void authenticate(String email, String password, LoginForm.LoginEvent event) {
+        Employer employer = employerService.findEmployerByEmailAndPassword(email, password);
+        Searcher searcher = searcherService.findSearcherByEmailAndPassword(email, password);
 
         if (employer != null) {
             // Вход выполнен успешно, редирект к странице работодателя

@@ -13,7 +13,7 @@ public interface SearcherService {
     public boolean saveSearcher(Searcher searcher);
     public Searcher getSearcher(Long id);
     public void deleteSearcher(Long id);
-    public Searcher findSearcherByNameAndPassword(String name, String password);
+    public Searcher findSearcherByEmailAndPassword(String email, String password);
     public boolean isPasswordUnique(String password);
     public boolean isEmailUnique(String email);
 }

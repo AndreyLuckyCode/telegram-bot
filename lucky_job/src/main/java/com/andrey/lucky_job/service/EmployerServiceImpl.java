@@ -41,8 +41,8 @@ public class EmployerServiceImpl implements EmployerService{
         employerRepository.deleteById(id);
     }
     @Override
-    public Employer findEmployerByNameAndPassword(String name, String password) {
-        return employerRepository.findByNameAndPassword(name, password);
+    public Employer findEmployerByEmailAndPassword(String email, String password) {
+        return employerRepository.findByEmailAndPassword(email, password);
     }
     @Override
     public boolean isPasswordUnique(String password) {
