@@ -40,5 +40,9 @@ public class SearcherServiceImpl implements SearcherService{
     public void deleteSearcher(Long id) {
         searcherRepository.deleteById(id);
     }
+    @Override
+    public Searcher findSearcherByNameAndPassword(String name, String password) {
+        return searcherRepository.findByNameAndPassword(name, password);
+    }
 
 }

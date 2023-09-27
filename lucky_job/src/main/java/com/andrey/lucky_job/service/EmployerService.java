@@ -11,4 +11,5 @@ public interface EmployerService {
     public boolean saveEmployer(Employer employer);
     public Employer getEmployer(Long id);
     public void deleteEmployer(Long id);
+    public Employer findEmployerByNameAndPassword(String name, String password);
 }

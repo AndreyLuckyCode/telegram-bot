@@ -1,5 +1,6 @@
 package com.andrey.lucky_job.service;
 
+import com.andrey.lucky_job.models.Employer;
 import com.andrey.lucky_job.models.Searcher;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,4 +13,5 @@ public interface SearcherService {
     public boolean saveSearcher(Searcher searcher);
     public Searcher getSearcher(Long id);
     public void deleteSearcher(Long id);
+    public Searcher findSearcherByNameAndPassword(String name, String password);
 }
