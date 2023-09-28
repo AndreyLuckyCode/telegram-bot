@@ -7,6 +7,7 @@ import com.andrey.lucky_job.service.SearcherService;
 import com.andrey.lucky_job.views.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -158,6 +159,7 @@ public class SignupView extends Composite<VerticalLayout> {
         } else {
             saveSearcher(name, surname, dateOfBirth, email, phoneNumber, role, password);
         }
+        UI.getCurrent().navigate("login");
     }
 
     private void saveEmployer(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role, String password) {
@@ -165,7 +167,7 @@ public class SignupView extends Composite<VerticalLayout> {
             Employer employer = new Employer(name, surname, dateOfBirth, email, phoneNumber, role, password);
             boolean isSaved = employerService.saveEmployer(employer);
             if (isSaved) {
-                Notification.show("Welcome, employer!");
+                Notification.show("New employer account is created!");
             } else {
                 Notification.show("Error: Could not save employer. Please check the entered data.");
             }
@@ -179,7 +181,7 @@ public class SignupView extends Composite<VerticalLayout> {
             Searcher searcher = new Searcher(name, surname, dateOfBirth, email, phoneNumber, role, password);
             boolean isSaved = searcherService.saveSearcher(searcher);
             if (isSaved) {
-                Notification.show("Welcome, searcher!");
+                Notification.show("New searcher account is created!");
             } else {
                 Notification.show("Error: Could not save searcher. Please check the entered data.");
             }
