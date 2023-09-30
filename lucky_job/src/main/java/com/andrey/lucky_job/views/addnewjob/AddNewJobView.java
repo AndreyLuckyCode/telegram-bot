@@ -1,5 +1,6 @@
 package com.andrey.lucky_job.views.addnewjob;
 
+import com.andrey.lucky_job.models.Employer;
 import com.andrey.lucky_job.models.Vacancy;
 import com.andrey.lucky_job.service.VacancyService;
 import com.andrey.lucky_job.views.MainLayout;
@@ -14,8 +15,11 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -26,7 +30,7 @@ import org.springframework.stereotype.Component;
 @Component
 @UIScope
 @Scope("prototype")
-public class AddNewJobView extends Composite<VerticalLayout> {
+public class AddNewJobView extends Composite<VerticalLayout> implements BeforeEnterObserver {
 
     private final VacancyService vacancyService;
     private final SearcherView searcherView;
@@ -114,6 +118,17 @@ public class AddNewJobView extends Composite<VerticalLayout> {
             }
         } else {
             Notification.show("Error: Salary field cannot be empty.");
+        }
+    }
+
+    //Проверка роли пользователя текущей сессии (Employer only)
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        Object user = VaadinSession.getCurrent().getAttribute("user");
+        if (!(user instanceof Employer)) {
+            // перемещение пользователя на страницу входа
+            event.rerouteTo("main");
+            Notification.show("This page is available only for Employers");
         }
     }
 }

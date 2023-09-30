@@ -60,7 +60,7 @@ public class MainLayout extends AppLayout {
         nav.addItem(new SideNavItem("Sign in", SigninView.class, LineAwesomeIcon.CHECK_CIRCLE_SOLID.create()));
         nav.addItem(new SideNavItem("Employer", EmployerView.class, LineAwesomeIcon.PENCIL_RULER_SOLID.create()));
         nav.addItem(new SideNavItem("Add New Job", AddNewJobView.class, LineAwesomeIcon.GG.create()));
-        nav.addItem(new SideNavItem("Searcher", SearcherView.class, LineAwesomeIcon.TH_LIST_SOLID.create()));
+        nav.addItem(new SideNavItem("Vacancies", SearcherView.class, LineAwesomeIcon.TH_LIST_SOLID.create()));
         nav.addItem(new SideNavItem("About", AboutView.class, LineAwesomeIcon.BOOK_SOLID.create()));
 
         return nav;
