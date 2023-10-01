@@ -27,7 +27,6 @@ public class SearcherProfileView extends VerticalLayout implements AfterNavigati
     private final Button updateProfileInfoButton = new Button("update");
     private final Button logoutButton = new Button("Log out", e -> logout());
 
-    // Хранение информации о текущем пользователе
     private Searcher currentUser;
 
     public SearcherProfileView() {

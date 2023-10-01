@@ -1,6 +1,7 @@
 package com.andrey.lucky_job.views.searcher;
 
 import com.andrey.lucky_job.models.CV;
+import com.andrey.lucky_job.models.Searcher;
 import com.andrey.lucky_job.models.Vacancy;
 import com.andrey.lucky_job.service.CVService;
 import com.andrey.lucky_job.service.VacancyService;
@@ -21,6 +22,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -47,7 +49,7 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
     private final FormLayout cvForm;
     private FooterLayout bottomLayout;
     private final Button postButton;
-    private TextField authorField;
+    private TextField emailField;
     private TextField titleField;
     private SearcherViewCard vacancyCard;
     private Div cardContainer;
@@ -77,6 +79,22 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
 
         postButton.addClickListener(event -> {
             postButton.setVisible(false);
+
+            // Получить текущего пользователя
+            Object user = VaadinSession.getCurrent().getAttribute("user");
+
+            // Если текущий пользователь существует и он является Searcher
+            // тогда устанавливаем его email в поле emailField
+            if (user instanceof Searcher) {
+                Searcher currentUser = (Searcher) user;
+                emailField.setValue(currentUser.getEmail());
+            } else {
+                Notification.show("Only Searcher can post CVs");
+                cvForm.setVisible(false);
+                postButton.setVisible(true);
+                return;
+            }
+
             cvForm.setVisible(true);
         });
 
@@ -152,15 +170,15 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         form.getElement().getStyle().set("right", "-5%");
         form.getElement().getStyle().set("transform", "translate(-50%, -50%)");
 
-        authorField = new TextField("Author");
+        emailField = new TextField("Email");
         titleField = new TextField("Title");
         Button submitButton = new Button("Send");
         Button closeButton = new Button("Close");
 
-        form.add(authorField, titleField, upload, submitButton, closeButton);
+        form.add(emailField, titleField, upload, submitButton, closeButton);
 
         submitButton.addClickListener(event -> {
-            String author = authorField.getValue();
+            String author = emailField.getValue();
             String title = titleField.getValue();
 
             if (!author.isEmpty() && !title.isEmpty() && buffer.getInputStream() != null)  {
@@ -182,7 +200,7 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
 
                 cvService.saveCV(cv);
 
-                authorField.clear();
+                emailField.clear();
                 titleField.clear();
 
                 cvForm.setVisible(false); // Скрыть форму после успешной отправки
