@@ -1,6 +1,7 @@
 package com.andrey.lucky_job.views.searcher;
 
 import com.andrey.lucky_job.models.CV;
+import com.andrey.lucky_job.models.Employer;
 import com.andrey.lucky_job.models.Searcher;
 import com.andrey.lucky_job.models.Vacancy;
 import com.andrey.lucky_job.service.CVService;
@@ -258,12 +259,26 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
 
         Button likeButton = new Button("Like");
         Boolean isLiked = cv.isLiked();
+
+        // Получение текущего пользователя
+        Object user = VaadinSession.getCurrent().getAttribute("user");
+        Boolean userIsEmployer = user instanceof Employer;
+
         if (isLiked != null && isLiked) {
             likeButton.addClassName("like-button-clicked");
             likeButton.getElement().getStyle().set("backgroundColor", "red");
         }
 
+        // Кнопка будет активным только для Employer
+        likeButton.setEnabled(userIsEmployer);
+
         likeButton.addClickListener(event -> {
+            // Если текущий пользователь не является Employer, то прерываемся
+            if (!userIsEmployer) {
+                Notification.show("Only Employer can like CVs");
+                return;
+            }
+
             Boolean currentIsLiked = cv.isLiked();
             if (currentIsLiked != null && currentIsLiked) {
                 cv.setLiked(false);
@@ -276,6 +291,7 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
             }
             cvService.saveCV(cv);
         });
+
 
         cvMessage.add(likeButton);
 
