@@ -64,14 +64,13 @@ public class EmployerView extends Composite<VerticalLayout> implements BeforeEnt
     }
 
     private void setGridSearcherData(Grid<Searcher> grid) {
-        // Получите текущего пользователя из сессии
+        // Текущий пользователь из сессии
         Object user = VaadinSession.getCurrent().getAttribute("user");
 
-        // Проверьте, является ли пользователь типом Employer
         if (user instanceof Employer) {
             Employer currentUser = (Employer) user;
 
-            // Создать список для хранения лайкнутых Searcher
+            // Список для хранения лайкнутых Searcher
             List<Searcher> likedSearchers = new ArrayList<>();
 
             // Получаем всех Searchers
