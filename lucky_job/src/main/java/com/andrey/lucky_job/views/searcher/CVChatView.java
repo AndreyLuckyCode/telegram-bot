@@ -173,7 +173,8 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                CV cv = new CV(author, title, imageData, dateOfPublication, currentVacancy.getId());
+                Boolean liked = false;
+                CV cv = new CV(author, title, imageData, dateOfPublication, currentVacancy.getId(), liked);
 
                 Paragraph cvMessage = createMessageParagraph(cv);
 
@@ -235,6 +236,31 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
             cvMessage.add(content);
         }
 
+
+
+        Button likeButton = new Button("Like");
+        Boolean isLiked = cv.isLiked();
+        if (isLiked != null && isLiked) {
+            likeButton.addClassName("like-button-clicked");
+            likeButton.getElement().getStyle().set("backgroundColor", "red");
+        }
+
+        likeButton.addClickListener(event -> {
+            Boolean currentIsLiked = cv.isLiked();
+            if (currentIsLiked != null && currentIsLiked) {
+                cv.setLiked(false);
+                likeButton.removeClassName("like-button-clicked");
+                likeButton.getElement().getStyle().remove("backgroundColor");
+            } else {
+                cv.setLiked(true);
+                likeButton.addClassName("like-button-clicked");
+                likeButton.getElement().getStyle().set("backgroundColor", "red");
+            }
+            cvService.saveCV(cv);
+        });
+
+        cvMessage.add(likeButton);
+
         return cvMessage;
     }
 
@@ -289,5 +315,4 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
             add(cvForm, postButton);
         }
     }
-
 }

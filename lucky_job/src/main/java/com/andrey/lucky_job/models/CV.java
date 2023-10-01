@@ -17,6 +17,7 @@ public class CV {
     @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] imageData;
     private Date dateOfPublication;
+    private Boolean liked;
 
 
     public Long getId() {
@@ -37,16 +38,12 @@ public class CV {
     public void setTitle(String title) {
         this.title = title;
     }
-
-
     public byte[] getImageData() {
         return imageData;
     }
     public void setImageData(byte[] imageData) {
         this.imageData = imageData;
     }
-
-
     public Date getDateOfPublication() {
         return dateOfPublication;
     }
@@ -59,15 +56,21 @@ public class CV {
     public void setVacancyId(Long vacancyId) {
         this.vacancyId = vacancyId;
     }
-
+    public Boolean isLiked() {
+        return liked;
+    }
+    public void setLiked(Boolean liked) {
+        this.liked = liked;
+    }
 
     public CV() {
     }
-    public CV(String author, String title, byte [] imageData, Date dateOfPublication, Long vacancyId) {
+    public CV(String author, String title, byte [] imageData, Date dateOfPublication, Long vacancyId, Boolean liked) {
         this.author = author;
         this.title = title;
         this.imageData = imageData;
         this.dateOfPublication = dateOfPublication;
         this.vacancyId = vacancyId;
+        this.liked = liked;
     }
 }
