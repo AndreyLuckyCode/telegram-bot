@@ -42,4 +42,9 @@ public class CVServiceImpl implements CVService{
     public List<CV> getCVsForVacancy(Long vacancyId) {
         return cvRepository.findByVacancyId(vacancyId);
     }
+    @Override
+    public List<CV> findLikedCVsByAuthor(String author) {
+        return cvRepository.findByAuthorAndLikedIsTrue(author);
+    }
+
 }

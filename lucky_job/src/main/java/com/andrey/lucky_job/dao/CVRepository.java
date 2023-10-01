@@ -10,4 +10,5 @@ public interface CVRepository extends JpaRepository<CV, Long> {
     @Transactional
     void deleteAllCVByVacancyId(Long vacancyId);
     List<CV> findByVacancyId(Long vacancyId);
+    List<CV> findByAuthorAndLikedIsTrue(String author);
 }
