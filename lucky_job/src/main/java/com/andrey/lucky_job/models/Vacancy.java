@@ -15,6 +15,7 @@ public class Vacancy {
     private String requirements;
     private String responsibilities;
     private int salary;
+    private Long employerId;
 
     public Long getId() {
         return id;
@@ -46,13 +47,20 @@ public class Vacancy {
     public void setSalary(int salary) {
         this.salary = salary;
     }
+    public Long getEmployerId() {
+        return employerId;
+    }
+    public void setEmployerId(Long employerId) {
+        this.employerId = employerId;
+    }
 
     public Vacancy() {
     }
-    public Vacancy(String company, String requirements, String responsibilities, int salary) {
+    public Vacancy(String company, String requirements, String responsibilities, int salary, Long employerId) {
         this.company = company;
         this.requirements = requirements;
         this.responsibilities = responsibilities;
         this.salary = salary;
+        this.employerId = employerId;
     }
 }

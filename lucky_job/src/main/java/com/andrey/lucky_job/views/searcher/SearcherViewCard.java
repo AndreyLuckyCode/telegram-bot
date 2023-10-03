@@ -1,5 +1,6 @@
 package com.andrey.lucky_job.views.searcher;
 
+import com.andrey.lucky_job.models.Employer;
 import com.andrey.lucky_job.models.Vacancy;
 import com.andrey.lucky_job.service.CVService;
 import com.andrey.lucky_job.service.VacancyService;
@@ -8,6 +9,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,9 +19,12 @@ public class SearcherViewCard extends ListItem {
     private Span subtitle;
     private Paragraph description;
     private Span badge;
+    private Button deleteButton; // добавлено
+    private Button updateButton; // добавлено
+
     @Autowired
     private final CVService cvService;
-    public SearcherViewCard(String company, String requirements, String responsibilities, int salary, Long vacancyId, VacancyService vacancyService, boolean displayButtons, CVService cvService) {
+    public SearcherViewCard(String company, String requirements, String responsibilities, int salary, Long vacancyId, VacancyService vacancyService, boolean displayButtons, CVService cvService, Vacancy vacancy) {
         addClassNames(Background.CONTRAST_5, Display.FLEX, FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
                 BorderRadius.LARGE);
         this.displayButtons = displayButtons;
@@ -51,27 +56,30 @@ public class SearcherViewCard extends ListItem {
         badge.getElement().setAttribute("theme", "badge");
         badge.setText(String.format("%d $", salary));
 
+        deleteButton = new Button("Delete");
+        updateButton = new Button("Update");
 
-        //Проверяем значение в конструкторе для отображения кнопок (по дефолту true)
         if(displayButtons) {
-            Button updateButton = new Button("Update");
-            updateButton.getElement().addEventListener("click", ignore -> {
-                createEditDialog(company, requirements, responsibilities, salary, vacancyId, vacancyService);
-            }).addEventData("event.stopPropagation()");
-
-            Button deleteButton = new Button("Delete");
+            updateButton.getElement().addEventListener("click", ignore -> createEditDialog(company, requirements, responsibilities, salary, vacancyId, vacancyService))
+                    .addEventData("event.stopPropagation()");
             deleteButton.getElement().addEventListener("click", ignore -> {
                 cvService.deleteAllCVByVacancyId(vacancyId);
                 vacancyService.deleteVacancy(vacancyId);
                 this.setVisible(false);
             }).addEventData("event.stopPropagation()");
+        }
 
-            HorizontalLayout buttonLayout = new HorizontalLayout(updateButton, deleteButton);
-            buttonLayout.setSpacing(true);
+        HorizontalLayout buttonLayout = new HorizontalLayout(updateButton, deleteButton);
+        buttonLayout.setSpacing(true);
 
-            add(div, header, subtitle, description, badge, buttonLayout);
+        add(div, header, subtitle, description, badge, buttonLayout);
+
+        // Controlling visibility of buttons based on user roles
+        Object currentUser = VaadinSession.getCurrent().getAttribute("user");
+        if(currentUser != null && currentUser instanceof Employer && ((Employer) currentUser).getId().equals(vacancy.getEmployerId())){
+            setButtonsVisible(true);
         } else {
-            add(div, header, subtitle, description, badge);
+            setButtonsVisible(false);
         }
 
         // Стили для изменения размера при наведении
@@ -145,4 +153,11 @@ public class SearcherViewCard extends ListItem {
         description.setText(responsibilities);
         badge.setText(String.valueOf(salary) + " $");
     }
+
+
+    public void setButtonsVisible(boolean visible) {
+        deleteButton.setVisible(visible);
+        updateButton.setVisible(visible);
+    }
+
 }

@@ -132,8 +132,8 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
                 vacancy.getId(),
                 vacancyService,
                 false,
-                cvService
-        );
+                cvService,
+                vacancy);
     }
 
     // Расположение и отображение карточки

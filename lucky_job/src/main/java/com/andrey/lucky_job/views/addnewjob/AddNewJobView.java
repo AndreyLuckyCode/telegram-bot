@@ -100,7 +100,9 @@ public class AddNewJobView extends Composite<VerticalLayout> implements BeforeEn
         if (!salaryText.isEmpty()) {
             try {
                 int salary = Integer.parseInt(salaryText);
-                Vacancy vacancy = new Vacancy(company, requirements, responsibilities, salary);
+                Employer currentUser = (Employer) VaadinSession.getCurrent().getAttribute("user");
+                Long employerId = currentUser.getId();
+                Vacancy vacancy = new Vacancy(company, requirements, responsibilities, salary, employerId);
                 vacancyService.saveVacancy(vacancy);
 
                 // Триггер для AddCardEvent в SearcherView

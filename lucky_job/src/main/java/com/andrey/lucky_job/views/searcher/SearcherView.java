@@ -9,7 +9,6 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -80,9 +79,10 @@ public class SearcherView extends Composite<VerticalLayout> {
                 vacancy.getId(),
                 vacancyService,
                 true,
-                cvService
+                cvService,
+                vacancy);
 
-        );
+
         card.setWidth("29%"); // Устанавливаем ширину карточки
         cardLayout.getStyle().set("gap", "20px"); // Устанавливаем отступ между карточками
         cardLayout.addComponentAtIndex(0, card);
