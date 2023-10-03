@@ -279,6 +279,13 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
                 return;
             }
 
+            Object currentUser = VaadinSession.getCurrent().getAttribute("user");
+            if(!((Employer) currentUser).getId().equals(currentVacancy.getEmployerId())){
+                Notification.show("Only author of the vacancy can react");
+                return;
+            }
+
+
             Boolean currentIsLiked = cv.isLiked();
             if (currentIsLiked != null && currentIsLiked) {
                 cv.setLiked(false);

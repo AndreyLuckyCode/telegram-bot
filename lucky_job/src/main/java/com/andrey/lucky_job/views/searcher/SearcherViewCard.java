@@ -19,8 +19,8 @@ public class SearcherViewCard extends ListItem {
     private Span subtitle;
     private Paragraph description;
     private Span badge;
-    private Button deleteButton; // добавлено
-    private Button updateButton; // добавлено
+    private Button deleteButton;
+    private Button updateButton;
 
     @Autowired
     private final CVService cvService;
