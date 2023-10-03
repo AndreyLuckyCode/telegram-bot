@@ -76,7 +76,7 @@ public class SearcherViewCard extends ListItem {
 
         // Controlling visibility of buttons based on user roles
         Object currentUser = VaadinSession.getCurrent().getAttribute("user");
-        if(currentUser != null && currentUser instanceof Employer && ((Employer) currentUser).getId().equals(vacancy.getEmployerId())){
+        if(displayButtons && currentUser != null && currentUser instanceof Employer && ((Employer) currentUser).getId().equals(vacancy.getEmployerId())){
             setButtonsVisible(true);
         } else {
             setButtonsVisible(false);
