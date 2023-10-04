@@ -8,4 +8,5 @@ public interface SearcherRepository extends JpaRepository<Searcher, Long> {
         Searcher findByEmailAndPassword(String email, String password);
         boolean existsByPassword(String password);
         boolean existsByEmail(String email);
+        Searcher findByEmail(String email);
 }

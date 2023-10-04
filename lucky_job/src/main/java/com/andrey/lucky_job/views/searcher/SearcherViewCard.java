@@ -74,7 +74,7 @@ public class SearcherViewCard extends ListItem {
 
         add(div, header, subtitle, description, badge, buttonLayout);
 
-        // Controlling visibility of buttons based on user roles
+        // Скрываем кнопки управления карточкой для всех, кроме автора вакансии
         Object currentUser = VaadinSession.getCurrent().getAttribute("user");
         if(displayButtons && currentUser != null && currentUser instanceof Employer && ((Employer) currentUser).getId().equals(vacancy.getEmployerId())){
             setButtonsVisible(true);

@@ -52,4 +52,9 @@ public class SearcherServiceImpl implements SearcherService{
     public boolean isEmailUnique(String email) {
         return !searcherRepository.existsByEmail(email);
     }
+    @Override
+    public Searcher findSearcherByEmail(String email) {
+        return searcherRepository.findByEmail(email);
+    }
 }
+

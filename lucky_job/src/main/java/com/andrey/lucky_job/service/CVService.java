@@ -12,4 +12,6 @@ public interface CVService {
     void deleteAllCVByVacancyId(Long vacancyId);
     List<CV> getCVsForVacancy(Long vacancyId);
     List<CV> findLikedCVsByAuthor(String author);
+    List<CV> findAllCVsByEmployerId(Long employerId);
+
 }

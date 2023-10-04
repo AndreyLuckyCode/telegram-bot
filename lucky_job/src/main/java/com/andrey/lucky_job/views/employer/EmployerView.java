@@ -70,24 +70,29 @@ public class EmployerView extends Composite<VerticalLayout> implements BeforeEnt
         if (user instanceof Employer) {
             Employer currentUser = (Employer) user;
 
-            // Список для хранения лайкнутых Searcher
-            List<Searcher> likedSearchers = new ArrayList<>();
+            // Получаем список всех резюме, связанных с этим работодателем
+            List<CV> cvs = cvService.findAllCVsByEmployerId(currentUser.getId());
 
-            // Получаем всех Searchers
-            List<Searcher> allSearchers = searcherService.getAllSearchers();
+            // Список для хранения кандидатов, которые подали резюме
+            List<Searcher> cvSearchers = new ArrayList<>();
 
-            for (Searcher s : allSearchers) {
-                // Используем email каждого Searcher, чтобы получить список "лайкнутых" CV
-                List<CV> likedCVs = cvService.findLikedCVsByAuthor(s.getEmail());
+            for (CV cv : cvs) {
+                // Если резюме было лайкнуто работодателем
+                if(cv.isLiked()) {
+                    // Берем email автора (по сути это и есть email Searcher)
+                    String authorEmail = cv.getAuthor();
+                    // Ищем Searcher по данному email
+                    Searcher s = searcherService.findSearcherByEmail(authorEmail);
 
-                // Если у Searcher есть "лайкнутые" CV, добавляем его в список
-                if (!likedCVs.isEmpty()) {
-                    likedSearchers.add(s);
+                    // Если этот кандидат еще не добавлен в список, добавляем его
+                    if (!cvSearchers.contains(s)) {
+                        cvSearchers.add(s);
+                    }
                 }
             }
 
-            // Показываем только Searchers, у которых есть "лайкнутые" CV
-            grid.setItems(likedSearchers);
+            // Показываем только кандидатов, которые подали резюме
+            grid.setItems(cvSearchers);
         } else {
             // Если пользователь не является Employer, показываем пустую таблицу
             grid.setItems(new ArrayList<>());

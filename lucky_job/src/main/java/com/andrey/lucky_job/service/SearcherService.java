@@ -16,4 +16,5 @@ public interface SearcherService {
     public Searcher findSearcherByEmailAndPassword(String email, String password);
     public boolean isPasswordUnique(String password);
     public boolean isEmailUnique(String email);
+    Searcher findSearcherByEmail(String email);
 }
