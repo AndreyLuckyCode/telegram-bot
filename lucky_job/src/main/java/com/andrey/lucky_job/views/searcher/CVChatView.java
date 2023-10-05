@@ -225,8 +225,8 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         Paragraph cvMessage = new Paragraph();
         Div content = new Div();
 
-        content.getElement().setProperty("innerHTML", "Author: " + cv.getAuthor() + "<br>" +
-                "Title: " + cv.getTitle() + "<br>" +
+        content.getElement().setProperty("innerHTML", cv.getAuthor() + "<br>" +
+                cv.getTitle() + "<br>" +
                 "Date of publication: " + cv.getDateOfPublication());
 
         cvMessage.getStyle().set("border", "1px solid black")
@@ -307,19 +307,28 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
 
         Button dislikeButton = new Button("Dislike");
 
+        Object currentUser = VaadinSession.getCurrent().getAttribute("user");
+        if(currentUser != null && currentUser instanceof Employer && ((Employer) currentUser).getId().equals(currentVacancy.getEmployerId())){
+            dislikeButton.setVisible(true);
+        } else {
+            dislikeButton.setVisible(false);
+        }
+
         dislikeButton.addClickListener(event -> {
 
-            if (!userIsEmployer) {
-                Notification.show("Only Employer can delete CVs");
-                return;
-            }
+            Dialog confirmationDialog = new Dialog();
+            Button confirmButton = new Button("Confirm", e -> {
+                if(((Employer) currentUser).getId().equals(currentVacancy.getEmployerId())){
+                    Notification.show("Will be deleted");
+                    cvService.deleteCV(cv.getId());
+                    messageListLayout.remove(cvMessage);
+                    confirmationDialog.close();
+                }
+            });
+            Button cancelButton = new Button("Cancel", e -> confirmationDialog.close());
+            confirmationDialog.add(new Paragraph("Are you sure you want to delete this CV?"), confirmButton, cancelButton);
 
-        Object currentUser = VaadinSession.getCurrent().getAttribute("user");
-        if(((Employer) currentUser).getId().equals(currentVacancy.getEmployerId())){
-            Notification.show("Will be deleted");
-            cvService.deleteCV(cv.getId());
-            messageListLayout.remove(cvMessage);
-        }
+            confirmationDialog.open();
         });
 
         cvMessage.add(dislikeButton);
