@@ -40,19 +40,19 @@ public class SearcherServiceImpl implements SearcherService{
     public void deleteSearcher(Long id) {
         searcherRepository.deleteById(id);
     }
-    @Override
+    @Override  //Для проверки данных при авторизации
     public Searcher findSearcherByEmailAndPassword(String email, String password) {
         return searcherRepository.findByEmailAndPassword(email, password);
     }
-    @Override
+    @Override  // Для проверки уникальности при регистрации
     public boolean isPasswordUnique(String password) {
         return !searcherRepository.existsByPassword(password);
     }
-    @Override
+    @Override  // Для проверки при регистрации
     public boolean isEmailUnique(String email) {
         return !searcherRepository.existsByEmail(email);
     }
-    @Override
+    @Override  // Для поиска автора резюме (CV)
     public Searcher findSearcherByEmail(String email) {
         return searcherRepository.findByEmail(email);
     }

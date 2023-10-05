@@ -39,19 +39,19 @@ public class CVServiceImpl implements CVService{
     public void deleteCV(Long id) {
         cvRepository.deleteById(id);
     }
-    @Override
+    @Override  // Для делита всех резюме каскадом при делите вакансии
     public void deleteAllCVByVacancyId(Long vacancyId) {
         cvRepository.deleteAllCVByVacancyId(vacancyId);
     }
-    @Override
+    @Override  // Для поиска всех резюме под вакансией
     public List<CV> getCVsForVacancy(Long vacancyId) {
         return cvRepository.findByVacancyId(vacancyId);
     }
-    @Override
+    @Override  // Фильтрация по лайкам
     public List<CV> findLikedCVsByAuthor(String author) {
         return cvRepository.findByAuthorAndLikedIsTrue(author);
     }
-    @Override
+    @Override  // Поиск всех резюме под всеми вакансиями определенного работодателя
     public List<CV> findAllCVsByEmployerId(Long employerId) {
         // Получаем список всех вакансий, связанных с работодателем
         List<Vacancy> vacancies = vacancyRepository.findAllByEmployerId(employerId);

@@ -40,15 +40,15 @@ public class EmployerServiceImpl implements EmployerService{
     public void deleteEmployer(Long id) {
         employerRepository.deleteById(id);
     }
-    @Override
+    @Override  //Для проверки данных при авторизации
     public Employer findEmployerByEmailAndPassword(String email, String password) {
         return employerRepository.findByEmailAndPassword(email, password);
     }
-    @Override
+    @Override  // Для проверки уникальности при регистрации
     public boolean isPasswordUnique(String password) {
         return !employerRepository.existsByPassword(password);
     }
-    @Override
+    @Override  // Для проверки при регистрации
     public boolean isEmailUnique(String email) {
         return !employerRepository.existsByEmail(email);
     }

@@ -195,7 +195,7 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
                 Boolean liked = false;
                 CV cv = new CV(author, title, imageData, dateOfPublication, currentVacancy.getId(), liked);
 
-                Paragraph cvMessage = createMessageParagraph(cv);
+                Paragraph cvMessage = createMessageParagraph(cv, messageListLayout);
 
                 messageListLayout.add(cvMessage);
 
@@ -221,7 +221,7 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
     }
 
     // Сообщение
-    private Paragraph createMessageParagraph(CV cv) {
+    private Paragraph createMessageParagraph(CV cv, VerticalLayout messageListLayout) {
         Paragraph cvMessage = new Paragraph();
         Div content = new Div();
 
@@ -255,7 +255,8 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
             cvMessage.add(content);
         }
 
-
+// *******************************************  LIKE BUTTON ******************************************************
+// *******************************************  LIKE BUTTON ******************************************************
 
         Button likeButton = new Button("Like");
         Boolean isLiked = cv.isLiked();
@@ -269,8 +270,8 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
             likeButton.getElement().getStyle().set("backgroundColor", "red");
         }
 
-        // Кнопка будет активным только для Employer
-        likeButton.setEnabled(userIsEmployer);
+        // Кнопка будет активным только для Employer (мб имеет смысл убрать, чтобы срабатывал нотификейшн ниже)
+//        likeButton.setEnabled(userIsEmployer);
 
         likeButton.addClickListener(event -> {
             // Если текущий пользователь не является Employer, то прерываемся
@@ -299,8 +300,29 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
             cvService.saveCV(cv);
         });
 
-
         cvMessage.add(likeButton);
+
+// *******************************************  DISLIKE BUTTON ******************************************************
+// *******************************************  DISLIKE BUTTON ******************************************************
+
+        Button dislikeButton = new Button("Dislike");
+
+        dislikeButton.addClickListener(event -> {
+
+            if (!userIsEmployer) {
+                Notification.show("Only Employer can delete CVs");
+                return;
+            }
+
+        Object currentUser = VaadinSession.getCurrent().getAttribute("user");
+        if(((Employer) currentUser).getId().equals(currentVacancy.getEmployerId())){
+            Notification.show("Will be deleted");
+            cvService.deleteCV(cv.getId());
+            messageListLayout.remove(cvMessage);
+        }
+        });
+
+        cvMessage.add(dislikeButton);
 
         return cvMessage;
     }
@@ -312,7 +334,7 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         messageListLayout.removeAll();
 
         for (CV cv : cvList) {
-            Paragraph cvMessage = createMessageParagraph(cv);
+            Paragraph cvMessage = createMessageParagraph(cv, messageListLayout);
             messageListLayout.add(cvMessage);
         }
     }
