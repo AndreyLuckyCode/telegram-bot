@@ -4,6 +4,7 @@ import com.andrey.lucky_job.models.Employer;
 import com.andrey.lucky_job.models.Vacancy;
 import com.andrey.lucky_job.service.CVService;
 import com.andrey.lucky_job.service.VacancyService;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.*;
@@ -63,10 +64,24 @@ public class SearcherViewCard extends ListItem {
             updateButton.getElement().addEventListener("click", ignore -> createEditDialog(company, requirements, responsibilities, salary, vacancyId, vacancyService))
                     .addEventData("event.stopPropagation()");
             deleteButton.getElement().addEventListener("click", ignore -> {
-                cvService.deleteAllCVByVacancyId(vacancyId);
-                vacancyService.deleteVacancy(vacancyId);
-                this.setVisible(false);
-            }).addEventData("event.stopPropagation()");
+
+                        Dialog confirmationDialog = new Dialog();
+                        confirmationDialog.add(new Text("Are you sure you want to delete this vacancy?"));
+
+                        Button confirmButton = new Button("Confirm", event -> {
+                            cvService.deleteAllCVByVacancyId(vacancyId);
+                            vacancyService.deleteVacancy(vacancyId);
+                            this.setVisible(false);
+                            confirmationDialog.close(); // Закройте диалог
+                        });
+
+                        Button cancelButton = new Button("Cancel", event -> confirmationDialog.close());  // Закройте диалог
+
+                        confirmationDialog.add(confirmButton, cancelButton);
+
+                        confirmationDialog.open();
+                    })
+                    .addEventData("event.stopPropagation()");
         }
 
         HorizontalLayout buttonLayout = new HorizontalLayout(updateButton, deleteButton);
