@@ -62,6 +62,7 @@ public class EmployerView extends Composite<VerticalLayout> implements BeforeEnt
                     approvalStatus[0].setApproved(checkbox.getValue());
                 }
                 approvalStatusService.save(approvalStatus[0]);
+                setGridSearcherData(basicGrid);
             });
 
             return checkbox;
@@ -113,6 +114,17 @@ public class EmployerView extends Composite<VerticalLayout> implements BeforeEnt
                     }
                 }
             }
+
+            // Сортируем список
+            cvSearchers.sort((searcher1, searcher2) -> {
+                ApprovalStatus status1 = approvalStatusService.findBySearcherIdAndEmployerId(searcher1.getId(), currentUser.getId());
+                ApprovalStatus status2 = approvalStatusService.findBySearcherIdAndEmployerId(searcher2.getId(), currentUser.getId());
+
+                boolean approved1 = (status1 != null) ? status1.isApproved() : false;
+                boolean approved2 = (status2 != null) ? status2.isApproved() : false;
+
+                return Boolean.compare(approved2, approved1); // Для отображения одобренных сначала
+            });
 
             // Показываем только кандидатов, которые подали резюме
             grid.setItems(cvSearchers);
