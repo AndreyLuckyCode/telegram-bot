@@ -2,6 +2,7 @@ package com.andrey.lucky_job.views.profile;
 
 import com.andrey.lucky_job.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -19,20 +20,21 @@ import com.andrey.lucky_job.models.Employer;
 @Scope("prototype")
 public class EmployerProfileView extends VerticalLayout implements AfterNavigationObserver, BeforeEnterObserver {
 
-        private final TextField firstNameField = new TextField("First Name");
-        private final TextField lastNameField = new TextField("Last Name");
-        private final TextField emailField = new TextField("Email");
-        private final TextField dateOfBirthField = new TextField("Date of birth");
-        private final TextField phoneNumberField = new TextField("Phone number");
-        private final Button updateProfileInfoButton = new Button("update");
+        private final Paragraph firstNameParagraph = new Paragraph("First Name");
+        private final Paragraph lastNameParagraph = new Paragraph("Last Name");
+        private final Paragraph emailParagraph = new Paragraph("Email");
+        private final Paragraph dateOfBirthParagraph = new Paragraph("Date of birth");
+        private final Paragraph phoneNumberParagraph = new Paragraph("Phone number");
         private final Button logoutButton = new Button("Log out", e -> logout());
 
         // Хранение информации о текущем пользователе
         private Employer currentUser;
 
         public EmployerProfileView() {
-                this.add(firstNameField, lastNameField, emailField, dateOfBirthField
-                        , phoneNumberField, updateProfileInfoButton, logoutButton);
+                this.add(
+                        firstNameParagraph, lastNameParagraph, emailParagraph,
+                        dateOfBirthParagraph, phoneNumberParagraph, logoutButton
+                );
         }
 
         @Override
@@ -61,11 +63,11 @@ public class EmployerProfileView extends VerticalLayout implements AfterNavigati
 
         private void updateProfileFields() {
                 if (currentUser != null) {
-                        firstNameField.setValue(currentUser.getName());
-                        lastNameField.setValue(currentUser.getSurname());
-                        emailField.setValue(currentUser.getEmail());
-                        dateOfBirthField.setValue(currentUser.getDateOfBirth().toString());
-                        phoneNumberField.setValue(currentUser.getPhoneNumber());
+                        firstNameParagraph.setText("Name: " + currentUser.getName());
+                        lastNameParagraph.setText("Surname: " + currentUser.getSurname());
+                        emailParagraph.setText("Email: " + currentUser.getEmail());
+                        dateOfBirthParagraph.setText("Date of birth: " + currentUser.getDateOfBirth().toString());
+                        phoneNumberParagraph.setText("Phone number: " + currentUser.getPhoneNumber());
                 }
         }
 
