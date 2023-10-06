@@ -1,20 +1,17 @@
 package com.andrey.lucky_job.views.profile;
 
 import com.andrey.lucky_job.models.CV;
-import com.andrey.lucky_job.models.Employer;
 import com.andrey.lucky_job.models.Searcher;
 import com.andrey.lucky_job.models.Vacancy;
 import com.andrey.lucky_job.service.CVService;
-import com.andrey.lucky_job.service.SearcherService;
 import com.andrey.lucky_job.service.VacancyService;
 import com.andrey.lucky_job.views.MainLayout;
+import com.andrey.lucky_job.views.searcher.CVChatView;
 import com.andrey.lucky_job.views.searcher.SearcherViewCard;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.charts.model.Label;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.VaadinSessionScope;
@@ -131,6 +128,11 @@ public class SearcherProfileView extends VerticalLayout implements AfterNavigati
                     cvService,
                     currentVacancy);
             vacancyCards.add(card);
+            card.setWidth("29%");
+
+            card.addClickListener(event -> {
+                UI.getCurrent().navigate(CVChatView.class, currentVacancy.getId());
+            });
         }
 
         // Добавляем карточки вакансий на страницу профиля
