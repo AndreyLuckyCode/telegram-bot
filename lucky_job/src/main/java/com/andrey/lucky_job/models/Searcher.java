@@ -1,9 +1,6 @@
 package com.andrey.lucky_job.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 
 import java.time.LocalDate;
@@ -22,6 +19,8 @@ public class Searcher {
     private String phoneNumber;
     private String role;
     private String password;
+    @Column(columnDefinition = "boolean default false")
+    private boolean approved;
 
 
     public Long getId() {
@@ -72,10 +71,16 @@ public class Searcher {
     public void setPassword(String password) {
         this.password = password;
     }
+    public boolean isApproved() {
+        return approved;
+    }
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
 
     public Searcher() {
     }
-    public Searcher(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role, String password) {
+    public Searcher(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role, String password, Boolean approved) {
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
@@ -83,5 +88,6 @@ public class Searcher {
         this.email = email;
         this.role = role;
         this.password = password;
+        this.approved = approved;
     }
 }

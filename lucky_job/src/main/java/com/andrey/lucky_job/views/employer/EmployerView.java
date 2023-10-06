@@ -1,8 +1,10 @@
 package com.andrey.lucky_job.views.employer;
 
+import com.andrey.lucky_job.models.ApprovalStatus;
 import com.andrey.lucky_job.models.CV;
 import com.andrey.lucky_job.models.Employer;
 import com.andrey.lucky_job.models.Searcher;
+import com.andrey.lucky_job.service.ApprovalStatusService;
 import com.andrey.lucky_job.service.CVService;
 import com.andrey.lucky_job.service.SearcherService;
 import com.andrey.lucky_job.views.MainLayout;
@@ -11,6 +13,7 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
@@ -34,16 +37,36 @@ import java.util.List;
 public class EmployerView extends Composite<VerticalLayout> implements BeforeEnterObserver {
     private final CVService cvService;
     private final SearcherService searcherService;
+    private final ApprovalStatusService approvalStatusService;
 
     @Autowired
-    public EmployerView(SearcherService searcherService, CVService cvService) {
+    public EmployerView(SearcherService searcherService, CVService cvService, ApprovalStatusService approvalStatusService) {
         this.searcherService = searcherService;
         this.cvService = cvService;
+        this.approvalStatusService = approvalStatusService;
 
         Button buttonPrimary = new Button();
         H3 h3 = new H3();
         Grid<Searcher> basicGrid = new Grid<>(Searcher.class);
-        basicGrid.setColumns("name", "surname", "dateOfBirth", "phoneNumber", "email", "role");
+        basicGrid.setColumns("name", "surname", "dateOfBirth", "phoneNumber", "email");
+
+        basicGrid.addComponentColumn(searcher -> {
+            Checkbox checkbox = new Checkbox();
+            final ApprovalStatus[] approvalStatus = {approvalStatusService.findBySearcherIdAndEmployerId(searcher.getId(), ((Employer) VaadinSession.getCurrent().getAttribute("user")).getId())};
+            checkbox.setValue(approvalStatus[0] != null && approvalStatus[0].isApproved());
+
+            checkbox.addClickListener(event -> {
+                if (approvalStatus[0] == null) {
+                    approvalStatus[0] = new ApprovalStatus(searcher.getId(), ((Employer)VaadinSession.getCurrent().getAttribute("user")).getId(), checkbox.getValue());
+                } else {
+                    approvalStatus[0].setApproved(checkbox.getValue());
+                }
+                approvalStatusService.save(approvalStatus[0]);
+            });
+
+            return checkbox;
+        }).setHeader("Approved");
+
 
         getContent().setHeightFull();
         getContent().setWidthFull();

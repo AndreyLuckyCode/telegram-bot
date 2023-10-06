@@ -76,7 +76,7 @@ public class SignupView extends Composite<VerticalLayout> {
                 Notification.show("Fields cannot be empty");
                 return;
             }
-            saveUser(firstName, lastName, dateOfBirth, email, phoneNumber, role, password);
+            saveUser(firstName, lastName, dateOfBirth, email, phoneNumber, role, password, false);
         });
 
         Button cancelButton = createButton("Cancel");
@@ -142,7 +142,7 @@ public class SignupView extends Composite<VerticalLayout> {
         return button;
     }
 
-    private void saveUser(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role, String password) {
+    private void saveUser(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role, String password, Boolean approved) {
 
         if (!isPasswordUnique(password)) {
             Notification.show("Please use a different password.");
@@ -157,7 +157,7 @@ public class SignupView extends Composite<VerticalLayout> {
         if (role.equals("Employer")) {
             saveEmployer(name, surname, dateOfBirth, email, phoneNumber, role, password);
         } else {
-            saveSearcher(name, surname, dateOfBirth, email, phoneNumber, role, password);
+            saveSearcher(name, surname, dateOfBirth, email, phoneNumber, role, password, false);
         }
         UI.getCurrent().navigate("login");
     }
@@ -176,9 +176,9 @@ public class SignupView extends Composite<VerticalLayout> {
         }
     }
 
-    private void saveSearcher(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role, String password) {
+    private void saveSearcher(String name, String surname, LocalDate dateOfBirth, String email, String phoneNumber, String role, String password, Boolean approved) {
         try {
-            Searcher searcher = new Searcher(name, surname, dateOfBirth, email, phoneNumber, role, password);
+            Searcher searcher = new Searcher(name, surname, dateOfBirth, email, phoneNumber, role, password, false);
             boolean isSaved = searcherService.saveSearcher(searcher);
             if (isSaved) {
                 Notification.show("New searcher account is created!");
