@@ -15,8 +15,10 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dependency.Uses;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -25,9 +27,11 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,12 +72,34 @@ public class EmployerView extends Composite<VerticalLayout> implements BeforeEnt
             return checkbox;
         }).setHeader("Approved");
 
+        basicGrid.addComponentColumn(searcher -> {
+            Button cvLinkButton = new Button("CV", event -> {
+                List<CV> cvs = cvService.findLikedCVsByAuthor(searcher.getEmail());
+                CV cvForSearcher = cvs.stream().filter(cv -> searcher.getEmail().equals(cv.getAuthor())).findFirst().orElse(null);
+
+                if (cvForSearcher != null) {
+                    StreamResource streamResource = new StreamResource(cvForSearcher.getTitle() + ".png",
+                            () -> new ByteArrayInputStream(cvForSearcher.getImageData()));
+                    Image cvImage = new Image(streamResource, "");
+
+                    cvImage.setWidth("100%");
+                    cvImage.setHeight("100%");
+                    Dialog dialog = new Dialog(cvImage);
+                    dialog.setWidth("35%");
+                    dialog.setHeight("120%");
+                    dialog.open();
+                } else {
+                    Notification.show("CV not found");
+                }
+            });
+
+            return cvLinkButton;
+        }).setHeader("CV");
 
         getContent().setHeightFull();
         getContent().setWidthFull();
         buttonPrimary.setText("One more vacancy?");
         buttonPrimary.addClickListener(event -> {
-            // Переход на страницу "Add new Job"
             UI.getCurrent().navigate(AddNewJobView.class);
         });
 
