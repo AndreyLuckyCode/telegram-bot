@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Route(value = "cv-chat", layout = MainLayout.class)
 @Component
@@ -298,6 +299,7 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
                 likeButton.getElement().getStyle().set("backgroundColor", "red");
             }
             cvService.saveCV(cv);
+            loadAndDisplayCVs();
         });
 
         cvMessage.add(likeButton);
@@ -372,6 +374,22 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
         imageDialog.setCloseOnEsc(true);
         imageDialog.setCloseOnOutsideClick(true);
         imageDialog.open();
+    }
+    private void loadAndDisplayCVs() {
+        List<CV> cvList = cvService.getCVsForVacancy(currentVacancy.getId());
+        cvList = cvList.stream()
+                .sorted((cv1, cv2) -> Boolean.compare(cv2.isLiked(), cv1.isLiked()))  // сортировка по лайкам
+                .collect(Collectors.toList());
+        displayCVs(cvList);
+    }
+
+    // Новый метод для отображения списка резюме
+    private void displayCVs(List<CV> cvList) {
+        messageListLayout.removeAll();
+        for (CV cv : cvList) {
+            Paragraph cvMessage = createMessageParagraph(cv, messageListLayout);
+            messageListLayout.add(cvMessage);
+        }
     }
 
     class FooterLayout extends VerticalLayout {
