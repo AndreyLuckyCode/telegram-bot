@@ -9,6 +9,7 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -16,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 
 @PageTitle("Main Page")
@@ -64,15 +66,26 @@ public class MainPageView extends Composite<VerticalLayout> {
         Button buttonPrimary4 = createButton("Sign Up");
 
         buttonPrimary4.addClickListener(event -> {
-            // Переход на страницу "Sign Up"
-            UI.getCurrent().navigate(SignupView.class);
+            Object currentUser = VaadinSession.getCurrent().getAttribute("user");
+            if(currentUser == null){
+                // Переход на страницу "Sign Up"
+                UI.getCurrent().navigate(SignupView.class);
+            } else {
+                Notification.show("If you want create new account please logout first");
+            }
         });
 
         Button buttonPrimary5 = createButton("Sign In");
 
         buttonPrimary5.addClickListener(event -> {
-            // Переход на страницу "Sign In"
-            UI.getCurrent().navigate(SigninView.class);
+            Object currentUser = VaadinSession.getCurrent().getAttribute("user");
+            if(currentUser == null){
+                // Переход на страницу "Sign In"
+                UI.getCurrent().navigate(SigninView.class);
+            } else {
+                Notification.show("If you want change your account please logout first");
+            }
+
         });
 
         layoutRow4.add(buttonPrimary4, buttonPrimary5);

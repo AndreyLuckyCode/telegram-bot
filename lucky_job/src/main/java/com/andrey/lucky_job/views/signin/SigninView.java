@@ -36,6 +36,8 @@ public class SigninView extends Composite<VerticalLayout> {
         this.searcherService = searcherService;
 
         LoginForm loginForm = new LoginForm();
+        loginForm.setForgotPasswordButtonVisible(false);
+
         LoginI18n i18n = LoginI18n.createDefault();
         i18n.getForm().setUsername("Email");
         i18n.getErrorMessage().setTitle("Email is required");
@@ -77,17 +79,6 @@ public class SigninView extends Composite<VerticalLayout> {
             Notification.show("Invalid credentials. Please enter correct data");
             event.getSource().setEnabled(true);
         }
-
-//        Object user = VaadinSession.getCurrent().getAttribute("user");
-
-//        if (user instanceof Employer) {
-//            // Действия для работодателя
-//        } else if (user instanceof Searcher) {
-//            // Действия для соискателя
-//        } else {
-//            // Нет активной сессии для пользователя
-//        }
-
     }
 
 }

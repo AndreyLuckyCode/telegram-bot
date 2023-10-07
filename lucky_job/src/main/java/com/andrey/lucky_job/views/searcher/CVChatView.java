@@ -342,6 +342,11 @@ public class CVChatView extends VerticalLayout implements HasUrlParameter<Long> 
     private void displayCVsForVacancy(Long vacancyId) {
         List<CV> cvList = cvService.getCVsForVacancy(vacancyId);
 
+        // Сортировка списка по лайкам при загрузке
+        cvList = cvList.stream()
+                .sorted((cv1, cv2) -> Boolean.compare(cv2.isLiked(), cv1.isLiked()))
+                .collect(Collectors.toList());
+
         messageListLayout.removeAll();
 
         for (CV cv : cvList) {
