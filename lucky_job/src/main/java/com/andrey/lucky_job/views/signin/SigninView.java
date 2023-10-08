@@ -18,6 +18,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @PageTitle("Sign in")
@@ -51,11 +52,10 @@ public class SigninView extends Composite<VerticalLayout> {
         loginForm.addLoginListener(event -> authenticate(event.getUsername(), event.getPassword(), event));
     }
     private void authenticate(String email, String password, LoginForm.LoginEvent event) {
-        Employer employer = employerService.findEmployerByEmailAndPassword(email, password);
-        Searcher searcher = searcherService.findSearcherByEmailAndPassword(email, password);
+        Employer employer = employerService.findEmployerByEmail(email);
+        Searcher searcher = searcherService.findSearcherByEmail(email);
 
-
-        if (employer != null) {
+        if (employer != null && BCrypt.checkpw(password, employer.getPassword())) {
             // Вход выполнен успешно, редирект к странице работодателя
             VaadinSession.getCurrent().setAttribute("user", employer);
 
@@ -65,7 +65,7 @@ public class SigninView extends Composite<VerticalLayout> {
 
             Notification.show("Welcome back, dear employer!");
 
-        } else if (searcher != null) {
+        } else if (searcher != null && BCrypt.checkpw(password, searcher.getPassword())) {
             // Вход выполнен успешно, редирект к странице соискателя
             VaadinSession.getCurrent().setAttribute("user", searcher);
 

@@ -23,6 +23,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -76,7 +77,8 @@ public class SignupView extends Composite<VerticalLayout> {
             String email = emailField.getValue();
             String phoneNumber = phoneNumberField.getValue();
             String role = occupationRadioGroup.getValue();
-            String password = passwordField.getValue();
+            String rawPassword = passwordField.getValue();
+            String password = BCrypt.hashpw(rawPassword, BCrypt.gensalt());
 
             if (firstName.isEmpty() || lastName.isEmpty() || dateOfBirth == null || email.isEmpty() || phoneNumber.isEmpty() || role == null) {
                 Notification.show("Fields cannot be empty");
@@ -98,7 +100,7 @@ public class SignupView extends Composite<VerticalLayout> {
                 Notification.show("Phone number should contain exactly 11 digits.");
                 return;
             }
-            if (!passwordPattern.matcher(password).matches()) {
+            if (!passwordPattern.matcher(rawPassword).matches()) {
                 Notification.show("Password must contain 7 or more characters with at least 1 uppercase letter and 1 digit.");
                 return;
             }
