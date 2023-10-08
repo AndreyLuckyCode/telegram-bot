@@ -25,6 +25,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.util.regex.Pattern;
 
 @PageTitle("Sign up")
 @Route(value = "registration", layout = MainLayout.class)
@@ -32,6 +34,10 @@ public class SignupView extends Composite<VerticalLayout> {
 
     private final EmployerService employerService;
     private final SearcherService searcherService;
+    Pattern namePattern = Pattern.compile("^[a-zA-Z]+$");
+    Pattern phonePattern = Pattern.compile("^\\d{11}$");
+    Pattern passwordPattern = Pattern.compile("^(?=.*[0-9])(?=.*[A-Z]).{7,}$");
+
     public SignupView(EmployerService employerService, SearcherService searcherService) {
         this.employerService = employerService;
         this.searcherService = searcherService;
@@ -76,6 +82,27 @@ public class SignupView extends Composite<VerticalLayout> {
                 Notification.show("Fields cannot be empty");
                 return;
             }
+            if (!namePattern.matcher(firstName).matches()) {
+                Notification.show("First name can contain only English letters.");
+                return;
+            }
+            if (!namePattern.matcher(lastName).matches()) {
+                Notification.show("Last name can contain only English letters.");
+                return;
+            }
+            if (Period.between(dateOfBirth, LocalDate.now()).getYears() < 18) {
+                Notification.show("You must be at least 18 years old.");
+                return;
+            }
+            if (!phonePattern.matcher(phoneNumber).matches()) {
+                Notification.show("Phone number should contain exactly 11 digits.");
+                return;
+            }
+            if (!passwordPattern.matcher(password).matches()) {
+                Notification.show("Password must contain 7 or more characters with at least 1 uppercase letter and 1 digit.");
+                return;
+            }
+
             saveUser(firstName, lastName, dateOfBirth, email, phoneNumber, role, password, false);
         });
 
